@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<title>速联惠 · 宽带 · 会员 一站式办理</title>
+<style>
+  :root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --primary-soft:#eff4ff;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --line:#e8edf5;
+    --bg:#ffffff;
+    --bg-soft:#f7f9fc;
+    --accent:#ff7a45;
+    --shadow:0 18px 48px -18px rgba(30,58,138,.22);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 24px;border-radius:999px;font-weight:600;font-size:15px;
+    cursor:pointer;border:1px solid transparent;transition:.25s ease;white-space:nowrap;
+  }
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 10px 24px -10px rgba(37,99,235,.6)}
+  .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--primary);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--primary);background:var(--primary-soft)}
+
+  /* ---------- Header ---------- */
+  header{
+    position:-webkit-sticky;position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid var(--line);
+  }
+  /* 支持毛玻璃才用半透明底 + 模糊；旧浏览器保留不透明底色 */
+  @supports ((-webkit-backdrop-filter:blur(12px)) or (backdrop-filter:blur(12px))){
+    header{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:.5px;cursor:pointer;transition:opacity .2s}
+  .logo:hover{opacity:.78}
+  .logo:focus-visible{outline:2px solid var(--primary);outline-offset:4px;border-radius:8px}
+  .nav-cta{display:flex;align-items:center;gap:12px}
+  /* 品牌标识：蓝色玻璃质感 + 信号波/星芒，header 与 footer 共用同一套视觉 */
+  .logo .mark,.foot .brand .mark{
+    position:relative;overflow:hidden;border-radius:12px;
+    display:grid;place-items:center;color:#fff;
+    background:
+      linear-gradient(125deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,0) 46%),
+      radial-gradient(circle at 26% 16%,rgba(255,255,255,.36) 0%,rgba(255,255,255,0) 60%),
+      linear-gradient(140deg,#1d4ed8 0%,#3779f5 52%,#6aa6ff 100%);
+    box-shadow:0 10px 22px -10px rgba(37,99,235,.78),inset 0 0 0 1px rgba(255,255,255,.26);
+  }
+  .logo .mark::after,.foot .brand .mark::after{
+    content:"";position:absolute;right:-9px;bottom:-13px;width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.30);pointer-events:none;
+  }
+  .logo .mark{width:38px;height:38px}
+  .logo .mark svg{width:21px;height:21px;position:relative;z-index:1}
+  .nav-links{display:flex;gap:34px;font-size:15px;color:var(--muted);font-weight:500}
+  .nav-links a:hover{color:var(--primary)}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;overflow:hidden;background:
+      radial-gradient(1100px 460px at 78% -10%,#e7f0ff 0%,rgba(231,240,255,0) 60%),
+      linear-gradient(180deg,#ffffff 0%,#f7f9fc 100%);
+  }
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-top:84px;padding-bottom:96px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--primary-soft);color:var(--primary-dark);
+    padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:22px
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--primary)}
+  .hero h1{font-size:50px;line-height:1.15;font-weight:800;letter-spacing:-.5px}
+  .hero h1 .hl{
+    background:linear-gradient(120deg,var(--primary),#6ea0ff);
+    -webkit-background-clip:text;background-clip:text;color:transparent
+  }
+  .hero p.lead{margin-top:20px;font-size:18px;color:var(--muted);max-width:500px}
+  .hero-cta{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+  .hero-trust{margin-top:28px;display:flex;gap:26px;color:var(--muted);font-size:14px}
+  .hero-trust b{color:var(--ink);font-size:20px;font-weight:800;display:block}
+
+  /* ---------- Hero visual ---------- */
+  .hero-visual{position:relative}
+  .glass{
+    background:#fff;border:1px solid var(--line);border-radius:26px;
+    box-shadow:var(--shadow);padding:26px;position:relative;overflow:hidden
+  }
+  .glass::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;
+    background:radial-gradient(420px 200px at 80% 0%,#eaf1ff 0%,rgba(234,241,255,0) 60%)}
+  .iso{display:block;width:100%;height:auto}
+  .float-card{
+    position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 12px 28px -12px rgba(30,58,138,.25);padding:12px 15px;font-size:13px;font-weight:600
+  }
+  .float-card.a{top:18px;right:-10px}
+  .float-card.b{bottom:26px;left:-14px}
+  .float-card.c{bottom:120px;right:-18px}
+  .float-card .num{color:var(--primary);font-size:18px}
+
+  /* ---------- Operators / 四大运营商 ---------- */
+  .ops{padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-soft)}
+  .ops-inner{display:flex;align-items:center;gap:36px}
+  .ops-intro{flex:0 0 232px;display:flex;flex-direction:column;gap:3px;padding-right:32px;border-right:1px solid var(--line)}
+  .ops-kicker{color:var(--primary);font-size:12px;font-weight:700;letter-spacing:1.4px}
+  .ops-intro strong{font-size:19px;font-weight:800;letter-spacing:-.2px}
+  .ops-desc{font-size:13px;color:var(--muted)}
+  .ops-list{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .ops-item{display:flex;align-items:center;gap:11px;min-width:0;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 20px -16px rgba(15,23,42,.45);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .ops-item:hover{transform:translateY(-3px);border-color:#d3e0ff;box-shadow:0 14px 26px -16px rgba(37,99,235,.5)}
+  .ops-logo{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff;font-size:17px;font-weight:800}
+  .ops-logo.u{background:linear-gradient(135deg,#ff8a2b,#e60012)}
+  .ops-logo.t{background:linear-gradient(135deg,#3b9bff,#0066cc)}
+  .ops-logo.m{background:linear-gradient(135deg,#2ac9b0,#009cde)}
+  .ops-logo.g{background:linear-gradient(135deg,#f2607c,#c8161d)}
+  .ops-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .ops-txt b{font-size:14.5px;font-weight:700;color:#334155;white-space:nowrap}
+  .ops-txt small{font-size:10px;letter-spacing:.7px;color:#94a3b8;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+
+  /* ---------- Section base ---------- */
+  section{padding:88px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 54px}
+  .sec-tag{color:var(--primary);font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase}
+  .sec-head h2{font-size:36px;font-weight:800;margin-top:12px;letter-spacing:-.5px}
+  .sec-head p{margin-top:14px;color:var(--muted);font-size:17px}
+
+  /* ---------- Services ---------- */
+  .svc{background:var(--bg-soft)}
+  .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;max-width:1000px;margin:0 auto;counter-reset:svc}
+  .card{
+    background:radial-gradient(680px 240px at 100% 0,#f2f7ff 0,rgba(242,247,255,0) 72%),#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 32px 28px;box-shadow:var(--shadow);transition:.28s ease;position:relative;overflow:hidden;
+    display:flex;flex-direction:column
+  }
+  .card:hover{transform:translateY(-6px);border-color:#cdddff;box-shadow:0 24px 56px -18px rgba(30,58,138,.28)}.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),#7aa9ff)}.card::after{counter-increment:svc;content:counter(svc,decimal-leading-zero);position:absolute;top:24px;right:28px;font-size:13px;font-weight:800;letter-spacing:1.5px;color:#c9d8f2}
+  .card .ico{
+    width:60px;height:60px;border-radius:18px;display:grid;place-items:center;
+    background:linear-gradient(140deg,#e7f0ff,#f6faff);border:1px solid #dbe7ff;color:var(--primary);margin-bottom:22px
+  }
+  .card .ico svg{width:30px;height:30px}
+  .card h3{font-size:23px;font-weight:800;letter-spacing:-.3px}
+  .card .desc{color:var(--muted);margin-top:10px;font-size:15px;line-height:1.7;min-height:52px}
+  .card ul{list-style:none;margin-top:18px;margin-bottom:22px;display:flex;flex-direction:column;gap:10px;min-height:104px}
+  .card li{display:flex;align-items:center;gap:10px;font-size:14.5px;color:#334155}
+  .card li .tick{width:18px;height:18px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+  .card li .tick svg{width:11px;height:11px}
+  .apps{margin-top:18px;margin-bottom:22px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;min-height:104px}
+  .apps span{background:#f2f6ff;border:1px solid #e0eafd;color:var(--primary-dark);font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px}
+  .card .more{margin-top:auto;display:flex;width:100%;align-items:center;justify-content:space-between;gap:8px;padding:13px 16px;border-radius:12px;background:var(--primary-soft);color:var(--primary-dark);font-weight:700;font-size:14.5px;transition:.28s ease}.card:hover .more{background:var(--primary);color:#fff}.card .more .arw{display:inline-block;transition:transform .28s ease}.card:hover .more .arw{transform:translateX(4px)}
+
+  /* ---------- Advantages ---------- */
+  .adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .adv{text-align:center;padding:30px 18px;background:#fff;border:1px solid var(--line);border-radius:var(--radius)}
+  .adv .ai{width:50px;height:50px;border-radius:14px;margin:0 auto 16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary-soft),#fff);color:var(--primary)}
+  .adv .ai svg{width:26px;height:26px}
+  .adv h4{font-size:17px;font-weight:800}
+  .adv p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  /* ---------- Steps ---------- */
+  .steps{background:var(--bg-soft)}
+  .step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;position:relative}
+  .step .n{font-size:42px;font-weight:800;color:var(--primary-soft);line-height:1}
+  .step h4{margin-top:6px;font-size:18px;font-weight:800}
+  .step p{color:var(--muted);font-size:14.5px;margin-top:8px}
+
+  /* ---------- Packages ---------- */
+  .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  /* 横向滚动容器 */
+  .pkg-scroll{display:flex;gap:18px;align-items:stretch;overflow-x:auto;
+    -webkit-scroll-snap-type:x mandatory;scroll-snap-type:x mandatory;
+    scrollbar-width:thin;scrollbar-color:#cdd9ee transparent;
+    /* 左右各出血 8px：给首卡圆角/阴影/地区绿条留出可见空间；
+       scroll-padding 与出血量配对，把吸附点钉在内容起点（scrollLeft=0），
+       避免强制吸附用偏移凑对齐而把卡片左侧切掉 */
+    padding:10px 8px 14px;margin:0 -8px;-webkit-overflow-scrolling:touch;
+    -webkit-scroll-padding-left:8px;scroll-padding-left:8px;
+    -webkit-scroll-padding-right:8px;scroll-padding-right:8px}
+  .pkg-scroll>.pkg{flex:0 0 272px;-webkit-scroll-snap-align:start;scroll-snap-align:start}
+  .pkg-scroll::-webkit-scrollbar{height:8px}
+  .pkg-scroll::-webkit-scrollbar-thumb{background:#cdd9ee;border-radius:999px}
+  .pkg-scroll::-webkit-scrollbar-track{background:transparent}
+  .pkg-scroll:hover::-webkit-scrollbar-thumb{background:#b6c6e4}
+  .scroll-hint{margin-top:6px;text-align:right;color:var(--muted);font-size:13px;letter-spacing:.2px}
+  .scroll-hint span{opacity:.7}
+  /* 左右箭头按钮 */
+  .pkg-carousel{position:relative;padding:0 60px}
+  .pkg-nav{position:absolute;top:45%;transform:translateY(-50%);z-index:3;width:42px;height:42px;border-radius:999px;
+    border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--primary);font-size:24px;font-weight:700;
+    line-height:1;cursor:pointer;box-shadow:var(--shadow);display:grid;place-items:center;transition:.2s;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+  .pkg-nav:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .pkg-nav:active{transform:translateY(-50%) scale(.92)}
+  .pkg-prev{left:8px}
+  .pkg-next{right:8px}
+  @media(max-width:900px){
+    .pkg-carousel{padding:0 54px}
+    .pkg-prev{left:5px}
+    .pkg-next{right:5px}
+  }
+  @media(max-width:560px){
+    .pkg-carousel{padding:0}
+    .pkg-scroll>.pkg{flex:0 0 80%}
+    .scroll-hint{text-align:center}
+    .pkg-nav{display:none}
+  }
+  .pkg{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);position:relative;transition:.28s;display:flex;flex-direction:column}
+  .pkg:hover{transform:translateY(-6px)}
+  .pkg.feature{border-color:var(--primary);background:linear-gradient(180deg,#fbfdff,#f4f8ff)}
+  .pkg .badge{position:absolute;top:14px;right:14px;z-index:2;background:var(--primary);color:#fff;font-size:12.5px;font-weight:700;padding:4px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(56,124,235,.32)}
+  .pkg .op{font-size:12.5px;font-weight:700;display:inline-block;padding:2px 10px;border-radius:999px;width:fit-content}
+  .pkg .op-g{color:#00a651;background:#e8f7ef}
+  .pkg .op-t{color:#0a8bd6;background:#e6f3fb}
+  .pkg .op-u{color:#e2231a;background:#fdecea}
+  .pkg .op-m{color:#1f6fe0;background:#e8f0fd}
+  .pkg .op-其他{color:var(--muted);background:var(--primary-soft)}
+  .pkg .op-vip{color:#1f6fe0;background:#e8f0fd}
+  .pkg .op-coupon{color:#d97706;background:#fff3e2}
+  .pkg .cname{font-size:17px;font-weight:800;color:var(--ink);margin-top:8px;line-height:1.35;min-height:46px}
+  .pkg .price{margin-top:12px;display:flex;align-items:baseline;gap:4px}
+  .pkg .price .y{font-size:15px;color:var(--ink);font-weight:700}
+  .pkg .price .v{font-size:38px;font-weight:800;color:var(--accent);letter-spacing:-1px}
+  .pkg .price .u{font-size:14px;color:var(--muted)}
+  .pkg .flow{margin-top:10px;font-size:15px;font-weight:700}
+  .pkg .flow b{color:var(--primary)}
+  .pkg ul{list-style:none;margin-top:16px;flex:1 1 auto;display:flex;flex-direction:column;gap:9px}
+  .pkg li{display:flex;align-items:center;gap:9px;font-size:14px;color:#334155}
+  .pkg li .tick{width:17px;height:17px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+  .pkg li .tick svg{width:10px;height:10px}
+  .pkg .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .pkg .chip{font-size:12px;font-weight:600;color:var(--primary);background:var(--primary-soft);padding:3px 10px;border-radius:999px}
+  /* 办理年龄：接口有真实年龄就显示具体范围，没有则显示「以办理页为准」 */
+  .pkg .pkg-age{
+    display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;
+    border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);
+  }
+  .pkg .pkg-age .age-ico{display:inline-flex;flex:none;color:var(--primary)}
+  .pkg .pkg-age .age-ico svg{width:14px;height:14px}
+  .pkg .pkg-age b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.2px}
+  .pkg .pkg-age.fallback b{color:var(--muted);font-weight:600;letter-spacing:0}
+  .pkg .btn{width:100%;justify-content:center;margin-top:auto;padding-top:12px}
+  .pkg-note{margin-top:26px;text-align:center;color:var(--muted);font-size:14px}
+  /* 「更多套餐」引导卡片 */
+  .pkg.more-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(135deg,#eef4ff,#f8fbff);border:1px dashed var(--primary);box-shadow:none}
+  .pkg.more-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .more-card .more-inner{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%}
+  .more-card .more-icon{width:46px;height:46px;border-radius:13px;background:var(--primary-soft);color:var(--primary);
+    display:grid;place-items:center;font-size:24px;font-weight:800;margin-bottom:2px}
+  .more-card .more-title{font-size:19px;font-weight:800;color:var(--ink)}
+  .more-card .more-desc{font-size:13.5px;color:var(--muted)}
+  .more-card .btn{width:100%;justify-content:center;margin-top:8px}
+  /* 橙色行标题左缘与对应首张卡片左缘对齐：60px = 轮播箭头预留 60px */
+  .sub-row-head{display:flex;align-items:baseline;gap:12px;margin:34px 0 2px;flex-wrap:wrap;padding-left:60px}
+  .sub-row-head .sub-tag{font-size:15px;font-weight:800;color:var(--accent)}
+  .sub-row-head .sub-note{font-size:12.5px;color:var(--muted)}
+  #broadband .sec-head,#vip .sec-head{margin-bottom:26px}
+  #broadband{background:var(--bg-soft)}
+  #adv{background:var(--bg-soft)}   /* 服务优势：与其它灰色版块统一 */
+  .sub-row-head.first-row{margin-top:0}
+  /* 窄屏轨道内边距变化，标题同步跟随首张卡片（必须放在基础 .sub-row-head 之后） */
+  @media(max-width:900px){.sub-row-head{padding-left:54px}}
+  @media(max-width:560px){.sub-row-head{padding-left:0;margin-left:0}}
+  .pkg-sync{display:inline-block;margin-left:6px;color:var(--primary);font-weight:600}
+  .pkg-state{grid-column:1/-1;text-align:center;color:var(--muted);padding:48px 0;font-size:15px}
+
+  /* ---------- Footer ---------- */
+  footer{background:#0c1424;color:#cbd5e1;padding:60px 0 30px}
+  .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px}
+  .foot h5{color:#fff;font-size:15px;font-weight:700;margin-bottom:16px}
+  .foot a{display:block;color:#94a3b8;font-size:14px;margin-bottom:10px}
+  .foot a:hover{color:#fff}
+  .foot .brand{display:flex;align-items:center;gap:11px;color:#fff;font-weight:800;font-size:18px;margin-bottom:14px}
+  .foot .brand .mark{width:36px;height:36px}
+  .foot .brand .mark svg{width:20px;height:20px;position:relative;z-index:1}
+  .foot p{font-size:14px;color:#94a3b8;max-width:300px}
+  .copy{border-top:1px solid #1f2c44;margin-top:40px;padding-top:22px;font-size:13px;color:#64748b;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .disclaimer{margin-top:18px;padding-top:16px;border-top:1px solid #18243a}
+  .disclaimer p{font-size:12.5px;line-height:1.9;color:#6b7c96;margin:0;max-width:none}
+  .disclaimer strong{color:#93a4bd;font-weight:600}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;gap:40px;padding-top:56px;padding-bottom:64px}
+    .hero h1{font-size:40px}
+    .cards{grid-template-columns:1fr;max-width:640px}
+    .adv-grid{grid-template-columns:repeat(2,1fr)}
+    .step-grid{grid-template-columns:1fr}
+    .foot{grid-template-columns:1fr 1fr}
+    .ops-inner{flex-direction:column;align-items:stretch;gap:20px}
+    .ops-intro{flex:none;padding:0 0 16px;border-right:0;border-bottom:1px solid var(--line)}
+    .ops-list{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    .hero h1{font-size:32px}
+    .disclaimer p{font-size:12px;line-height:1.85}
+    .adv-grid,.foot{grid-template-columns:1fr}
+    .hero-trust{gap:16px}
+    section{padding:64px 0}
+    .ops{padding:22px 0}
+    .ops-list{gap:10px}
+    .ops-item{padding:10px 11px;gap:9px}
+    .ops-logo{width:34px;height:34px;font-size:15px;border-radius:10px}
+    .ops-txt b{font-size:13.5px}
+    .ops-txt small{font-size:9px}
+  }
+  @media(max-width:430px){
+    .ops-txt small{display:none}   /* 窄屏隐藏英文小字，避免撑破卡片 */
+  }
+
+  /* ---------- 返回顶部悬浮按钮 ---------- */
+  .back-top{
+    position:fixed;right:24px;bottom:56px;z-index:60;
+    right:calc(24px + env(safe-area-inset-right));bottom:calc(56px + env(safe-area-inset-bottom));
+    width:48px;height:48px;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:50%;
+    display:grid;place-items:center;cursor:pointer;
+    color:#fff;background:linear-gradient(135deg,var(--primary),#5b8bff);
+    box-shadow:0 12px 30px -8px rgba(37,99,235,.55);
+    opacity:0;visibility:hidden;transform:translateY(12px);
+    transition:opacity .25s ease,transform .25s ease,visibility .25s ease;
+    -webkit-tap-highlight-color:transparent
+  }
+  .back-top svg{width:22px;height:22px}
+  .back-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+  .back-top.show:hover{transform:translateY(-3px);background:linear-gradient(135deg,var(--primary-dark),#4f7dff)}
+  .back-top:focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:3px}
+  @media(max-width:560px){
+    .back-top{right:16px;bottom:40px;width:44px;height:44px;
+      right:calc(16px + env(safe-area-inset-right));bottom:calc(40px + env(safe-area-inset-bottom))}
+  }
+
+  /* ---------- 地区智能推荐（IP 定位 + 手动切换） ---------- */
+  .region-bar{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    margin:22px 0 4px 58px;padding:12px 16px;   /* 左边缘对齐橙色标题首字 / 首张卡片 */
+    background:linear-gradient(90deg,#eff6ff 0%,#f8fbff 100%);
+    border:1px solid #dbe8ff;border-radius:14px;
+    transition:border-color .25s,box-shadow .25s;
+  }
+  /* 从数量胶囊跳过来时，短暂高亮目标专区的地区条 */
+  .region-bar.rc-focus{border-color:#7fb6ff;box-shadow:0 0 0 3px rgba(37,99,235,.14)}
+  .region-ico{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#dfeaff;color:var(--primary)}
+  .region-ico svg{width:17px;height:17px}
+  .region-txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 260px}
+  .region-title{font-size:14.5px;color:var(--ink);font-weight:700}
+  .region-tip{font-size:12px;color:var(--muted)}
+  .region-pick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);white-space:nowrap}
+  .region-select{
+    appearance:none;-webkit-appearance:none;padding:7px 30px 7px 12px;
+    border:1px solid #cddcf7;border-radius:9px;color:var(--ink);
+    font-size:13.5px;font-weight:600;cursor:pointer;outline:none;
+    background:#fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%232563eb' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 11px center;
+    transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .region-select:hover,.region-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+  /* ---------- 地区优先卡片：青绿视觉，与蓝色「热推」卡片区分 ---------- */
+  .pkg-scroll .pkg.pkg-local{
+    border-color:#86d9b8;background:linear-gradient(180deg,#fbfffd 0%,#f0fbf6 100%);
+    box-shadow:0 16px 36px -20px rgba(13,148,136,.5);
+  }
+  .pkg-scroll .pkg.pkg-local::before{
+    content:"";position:absolute;left:-1px;top:20px;bottom:20px;width:3px;
+    border-radius:0 3px 3px 0;background:linear-gradient(180deg,#34d399,#0d9488);
+  }
+  /* 同为热推时降级成中性灰，让「本省」成为这张卡的第一视觉 */
+  .pkg-scroll .pkg.pkg-local .badge{background:#64748b;box-shadow:none}
+  .pkg .badge-local{
+    position:absolute;top:14px;right:14px;z-index:2;
+    display:inline-flex;align-items:center;gap:5px;
+    color:#047857;background:#e3fbf0;border:1px solid #a7e8c8;
+    font-size:12px;font-weight:800;letter-spacing:.3px;
+    padding:3px 10px;border-radius:999px;
+    box-shadow:0 3px 10px rgba(16,185,129,.18);
+  }
+  .pkg .badge-local.below{top:48px}   /* 与右上角「热推」角标留出间距 */
+  .pkg .badge-local::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:#10b981;
+    box-shadow:0 0 0 2px rgba(16,185,129,.16);
+  }
+  /* 选定地区后的筛选提示：各专区可选卡片数，当前专区高亮 */
+  .region-summary{display:flex;align-items:center;flex-wrap:wrap;gap:5px 8px;margin-top:4px;font-size:12px;color:var(--muted);line-height:1.5}
+  .region-summary .rc-label{color:#475569;font-weight:600}
+  .region-summary .rc-item{
+    display:inline-flex;align-items:center;gap:4px;padding:1px 9px;border-radius:999px;
+    background:#f1f5f9;border:1px solid #e2e8f0;color:#475569;font-weight:600;
+    text-decoration:none;cursor:pointer;
+    transition:background .18s,border-color .18s,color .18s,box-shadow .18s;
+  }
+  .region-summary .rc-item.on{background:#e3fbf0;border-color:#a7e8c8;color:#047857}
+  .region-summary a.rc-item:hover,.region-summary a.rc-item:focus{
+    background:#e8f0ff;border-color:#a9c8ff;color:var(--primary-dark);
+    box-shadow:0 2px 8px rgba(37,99,235,.14);outline:none;
+  }
+  .region-summary a.rc-item.on:hover,.region-summary a.rc-item.on:focus{
+    background:#d1f5e5;border-color:#6fd3a4;color:#036c4e;
+  }
+  .region-summary .rc-item b{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.4}
+  .region-summary .rc-go{font-size:14px;line-height:1;color:#94a3b8;margin-left:1px;transition:transform .18s,color .18s}
+  .region-summary a.rc-item:hover .rc-go,.region-summary a.rc-item:focus .rc-go{
+    transform:translateX(2px);color:var(--primary);
+  }
+  .region-summary .rc-dot{color:#cbd5e1}
+  .region-summary .rc-none{color:#b45309}
+  .region-summary .rc-hint{color:#94a3b8}
+  @media(max-width:900px){
+    .region-bar{margin-left:52px}
+  }
+  @media(max-width:560px){
+    .region-bar{margin-left:-2px;padding-left:14px;margin-top:18px}
+    .region-txt{flex-basis:100%}
+    .region-pick{width:100%}
+  }
+  /* ============ 主流浏览器 / 移动端兼容性补充 ============ */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{overflow-wrap:break-word;
+    padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  a,button,select,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  button{-webkit-appearance:none;appearance:none;font:inherit}
+  .logo:focus{outline:2px solid var(--primary);outline-offset:4px;border-radius:8px}
+  .back-top:focus{outline:3px solid rgba(37,99,235,.35);outline-offset:3px}
+  @media (hover:none){
+    .btn-primary:hover{background:var(--primary);transform:none}
+    .btn-ghost:hover{background:#fff;border-color:var(--line)}
+    .logo:hover{opacity:1}
+    .back-top.show:hover{transform:translateY(0);background:linear-gradient(135deg,var(--primary),#5b8bff)}
+    .pkg-nav:hover{background:rgba(255,255,255,.92);color:var(--primary);border-color:var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  }
+  /* iOS Safari：可聚焦控件字号小于 16px 会在点击时强制放大页面 */
+  @media (max-width:560px){
+    .region-select{font-size:16px;max-width:100%}
+  }
+
+  /* ---------- 移动端导航栏 + 移动端显示优化 ---------- */
+  /* 锚点跳转时为 sticky 头部留出空间，避免版块标题被盖住 */
+  section[id]{scroll-margin-top:76px}
+  /* 三条横线按钮：默认隐藏，仅移动端显示 */
+  .nav-toggle{display:none}
+  @media(max-width:980px){
+    section[id]{scroll-margin-top:72px}
+    .nav{height:auto;min-height:60px;flex-wrap:nowrap}
+    .logo{font-size:17px}
+    .logo .mark{width:34px;height:34px}
+    .logo .mark svg{width:19px;height:19px}
+    .nav-cta{gap:8px}
+    .nav-cta .btn{padding:9px 16px;font-size:14px;min-height:40px}
+    .nav-toggle{
+      display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+      flex:none;width:40px;height:40px;padding:0;
+      background:#fff;border:1px solid var(--line);border-radius:12px;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .nav-toggle span{display:block;width:18px;height:2px;border-radius:2px;
+      background:var(--ink);transition:transform .2s ease,opacity .2s ease}
+    .nav-toggle:focus{outline:2px solid var(--primary);outline-offset:2px}
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    /* 二级菜单：绝对定位在 header 下方，默认收起，展开时纵向列出 6 个入口 */
+    .nav-links{
+      position:absolute;left:0;right:0;top:100%;z-index:55;
+      display:none;flex-direction:column;gap:0;
+      background:#fff;border-bottom:1px solid var(--line);
+      box-shadow:0 18px 30px -18px rgba(15,23,42,.4);
+      padding:6px 24px 12px;
+      max-height:calc(100vh - 72px);overflow-y:auto;-webkit-overflow-scrolling:touch;
+    }
+    .nav.open .nav-links{display:flex}
+    .nav-links a{
+      flex:none;display:flex;align-items:center;min-height:48px;
+      padding:0 4px;white-space:nowrap;font-size:15px;font-weight:600;color:var(--ink);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-links a:last-child{border-bottom:0}
+    .nav-links a.on{color:var(--primary);background:transparent;border-bottom-color:var(--primary)}
+    .nav-links a::after{content:"\203A";margin-left:auto;color:#c7d2e5;font-size:20px;font-weight:400}
+    /* 单列布局下右侧配图会掉到下方变成大块，移动端不再展示 */
+    .hero-visual{display:none}
+    .hero-grid{padding-bottom:56px;gap:0}
+  }
+  @media(max-width:560px){
+    .wrap{padding:0 20px}
+    .nav{min-height:56px}
+    .logo{font-size:16px;gap:8px}
+    .logo .mark{width:32px;height:32px;border-radius:10px}
+    .nav-cta{gap:7px}
+    .nav-cta .btn{padding:8px 13px;font-size:13px;min-height:38px}
+    .nav-toggle{width:38px;height:38px;border-radius:11px}
+    .nav-links{padding:6px 20px 12px}
+
+    /* 首屏：缩小留白与字号，避免小屏一屏放不下主标题 */
+    .hero-grid{padding-top:40px;padding-bottom:48px;gap:0}
+    .hero h1{font-size:30px;line-height:1.22}
+    .hero p.lead{font-size:15.5px;margin-top:16px}
+    .hero-cta{margin-top:26px;gap:10px}
+    .hero-cta .btn{flex:1 1 auto;justify-content:center;padding:12px 12px;font-size:14px;min-height:46px}
+    .hero-trust{gap:12px;font-size:12.5px;flex-wrap:wrap}
+
+    /* 版块节奏与标题 */
+    section{padding:56px 0}
+    .sec-head{margin-bottom:32px}
+    .sec-tag{font-size:12px}
+    .sec-head h2{font-size:27px}
+    .sec-head p{font-size:14.5px;margin-top:10px}
+    .card{padding:24px 20px}.card::after{top:20px;right:20px}
+    .card h3{font-size:19px}
+    .card .desc{font-size:14px;min-height:0}.card ul,.apps{min-height:0;margin-bottom:18px}
+    .card li{font-size:13.5px}
+    .adv-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .adv{padding:22px 12px}
+    .adv .ai{width:44px;height:44px}
+    .adv h4{font-size:15px}
+    .adv p{font-size:12.5px}
+    .step{padding:24px 20px}
+    .step .n{font-size:36px}
+
+    /* 套餐轨道：一屏露出下一张卡，明确提示可左右滑动 */
+    .pkg-scroll>.pkg{flex:0 0 84%;padding:22px 18px}
+    .pkg .price .v{font-size:34px}
+    .pkg li{font-size:13.5px}
+    .pkg .btn{min-height:44px;font-size:14px}
+    .sub-row-head{gap:6px;margin-top:28px}
+    .sub-row-head .sub-tag{font-size:14px}
+    .sub-row-head .sub-note{font-size:12px;flex-basis:100%;line-height:1.5}
+    .scroll-hint{font-size:12px}
+    .pkg-note{font-size:13px}
+    .region-bar{padding-top:10px;padding-bottom:10px}
+    .ops-list{gap:8px}
+    .ops-txt b{font-size:12.5px}
+
+    /* 页脚 */
+    footer{padding:48px 0 26px}
+    .foot{gap:24px}
+    .foot a{font-size:13.5px;margin-bottom:8px}
+    .copy{font-size:12px;margin-top:30px;padding-top:18px;justify-content:center;text-align:center}
+  }
+  /* 触屏设备：导航项点击反馈，避免 hover 粘滞 */
+  @media (hover:none){
+    .nav-links a:active{color:var(--primary);background:var(--primary-soft)}
+  }
+</style>
+<script>
+/* 兼容旧版 Safari / Android WebView：NodeList.forEach 与 passive 监听选项 */
+(function(){
+  if(window.NodeList&&!NodeList.prototype.forEach){NodeList.prototype.forEach=Array.prototype.forEach;}
+  window.slPassive=false;
+  try{
+    var o=Object.defineProperty({},'passive',{get:function(){window.slPassive={passive:true};return true;}});
+    var f=function(){};
+    window.addEventListener('sl_test',f,o);window.removeEventListener('sl_test',f,o);
+  }catch(e){}
+})();
+</script>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#" id="brandRefresh" title="刷新并返回顶部" aria-label="刷新页面并返回顶部">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3.5 9.9a12 12 0 0 1 17 0" opacity=".5"/>
+          <path d="M6.8 13.6a7.6 7.6 0 0 1 10.4 0" opacity=".85"/>
+          <path d="M12 16.7c.45 1.5 1 2.05 2.5 2.5-1.5.45-2.05 1-2.5 2.5-.45-1.5-1-2.05-2.5-2.5 1.5-.45 2.05-1 2.5-2.5z" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      速联惠
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#services">主营业务</a>
+      <a href="#adv">服务优势</a>
+      <a href="#broadband">宽带专区</a>
+      <a href="#vip">会员卡券</a>
+      <a href="#flow">办理流程</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-primary lnk-empty" data-empty="1" aria-label="联系客服（暂未设置链接）">联系客服</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="打开导航菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" style="padding:0">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>宽带与会员权益 · 一站式信息展示</span>
+      <h1>宽带 · 会员<br><span class="hl">按需选择 · 一站办理</span></h1>
+      <p class="lead">家庭宽带新装、迁移与提速，视频、音乐、网盘等会员权益按需开通；资费与办理条件以办理页说明为准。</p>
+      <div class="hero-cta">
+        <a href="#broadband" class="btn btn-primary">查看宽带专区 →</a>
+        <a href="#services" class="btn btn-ghost">了解业务</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="glass">
+        <svg class="iso" viewBox="0 0 460 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bp" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#5b8bff"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="230" cy="318" rx="170" ry="22" fill="#dbe6ff" opacity=".6"/>
+          <!-- broadband tower -->
+          <g transform="translate(70,90)">
+            <rect x="20" y="40" width="70" height="150" rx="10" fill="#eef4ff" stroke="#cdddff"/>
+            <rect x="34" y="60" width="42" height="26" rx="5" fill="url(#bp)"/>
+            <rect x="34" y="96" width="42" height="26" rx="5" fill="#cdddff"/>
+            <rect x="34" y="132" width="42" height="26" rx="5" fill="url(#bp)"/>
+            <circle cx="55" cy="26" r="14" fill="url(#bp)"/>
+            <path d="M55 12 a14 14 0 0 1 10 4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- member badge -->
+          <g transform="translate(180,180)">
+            <circle cx="50" cy="50" r="46" fill="url(#bp)"/>
+            <path d="M50 26 l7 14 15 2 -11 11 3 15 -14 -7 -14 7 3 -15 -11 -11 15 -2z" fill="#fff" opacity=".95"/>
+          </g>
+          <path d="M120 70 a40 40 0 0 1 40 -20" stroke="#5b8bff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
+          <path d="M300 250 a52 52 0 0 0 50 -26" stroke="#5b8bff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="float-card a">📶 家庭宽带<br><span class="num">多档可选</span></div>
+      <div class="float-card b">🔧 预约安装<br><span class="num">按当地排期</span></div>
+      <div class="float-card c">🎬 会员权益<br><span class="num">按需开通</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERATORS ============ -->
+<div class="ops">
+  <div class="wrap ops-inner">
+    <div class="ops-intro">
+      <span class="ops-kicker">主流网络 · 全面覆盖</span>
+      <strong>多家主流运营商</strong>
+      <span class="ops-desc">宽带 · 会员 一站办理</span>
+    </div>
+    <div class="ops-list">
+      <div class="ops-item"><span class="ops-logo u">联</span><span class="ops-txt"><b>中国联通</b><small>CHINA UNICOM</small></span></div>
+      <div class="ops-item"><span class="ops-logo t">电</span><span class="ops-txt"><b>中国电信</b><small>CHINA TELECOM</small></span></div>
+      <div class="ops-item"><span class="ops-logo m">移</span><span class="ops-txt"><b>中国移动</b><small>CHINA MOBILE</small></span></div>
+      <div class="ops-item"><span class="ops-logo g">广</span><span class="ops-txt"><b>中国广电</b><small>CHINA BROADNET</small></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SERVICES ============ -->
+<section id="services" class="svc">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">主营业务</div>
+      <h2>两项核心业务，覆盖日常所需</h2>
+      <p>无论家庭宽带还是日常会员权益，都能在这里找到合适的方案。</p>
+    </div>
+    <div class="cards">
+      <!-- 宽带 -->
+      <div class="card">
+        <div class="ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 18a14 14 0 0 1 18 0"/><path d="M6 14.5a9 9 0 0 1 12 0"/><path d="M9 11a4.5 4.5 0 0 1 6 0"/><circle cx="12" cy="20" r="1.3" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <h3>宽带办理</h3>
+        <div class="desc">家庭与企业宽带新装、迁移、提速，多档速率按需选择。</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span>百兆到千兆多档速率可选</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span>按地区筛选可办范围</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span>资费与合约规则以办理页为准</li>
+        </ul>
+        <a href="#broadband" class="more"><span>查看宽带套餐</span><span class="arw" aria-hidden="true">→</span></a>
+      </div>
+      <!-- 会员 -->
+      <div class="card">
+        <div class="ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="9" r="5"/><path d="M9 13l-1.5 7 4.5-2.5L16.5 20 15 13"/>
+          </svg>
+        </div>
+        <h3>会员办理</h3>
+        <div class="desc">影音、音乐、网盘、工具等会员权益按需选择，具体以办理页说明为准。</div>
+        <div class="apps">
+          <span>腾讯视频</span><span>爱奇艺</span><span>芒果TV</span><span>优酷</span><span>网易云音乐</span><span>QQ音乐</span><span>百度网盘</span><span>剪映</span>
+        </div>
+        <a href="#vip" class="more"><span>查看会员权益</span><span class="arw" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADVANTAGES ============ -->
+<section id="adv">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">为什么选择我们</div>
+      <h2>把省心做到每一个环节</h2>
+    </div>
+    <div class="adv-grid">
+      <div class="adv">
+        <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h4>信息透明</h4><p>资费与规则以办理页为准</p>
+      </div>
+      <div class="adv">
+        <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div>
+        <h4>咨询协助</h4><p>办理疑问可联系客服</p>
+      </div>
+      <div class="adv">
+        <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></div>
+        <h4>办理便捷</h4><p>按办理页指引完成流程</p>
+      </div>
+      <div class="adv">
+        <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
+        <h4>权益清楚</h4><p>内容与有效期以办理页为准</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BROADBAND ============ -->
+<section id="broadband">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">宽带专区</div>
+      <h2>多档速率 · 预约安装 · 以办理页为准</h2>
+      <p>单宽带与融合套餐实时同步自店铺，具体安装范围以办理页为准。</p>
+    </div>
+    <div class="region-bar" data-region-bar>
+      <span class="region-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+      <div class="region-txt">
+        <strong class="region-title">正在识别您的所在地区…</strong>
+        <span class="region-tip">地区由 IP 定位服务估算，仅用于套餐排序；本站不存储您的 IP</span>
+        <div class="region-summary" data-region-summary><span class="rc-hint">选择所在地区，查看本地可办宽带</span></div>
+      </div>
+      <label class="region-pick"><span>收货地区</span><select class="region-select" aria-label="选择收货地区"></select></label>
+    </div>
+    <div class="sub-row-head first-row">
+      <span class="sub-tag">速联惠 · 宽带专区</span>
+      <span class="sub-note">套餐随运营商政策更新，以办理页为准<span id="kdSync" class="pkg-sync"></span></span>
+    </div>
+    <div class="pkg-carousel">
+      <button class="pkg-nav pkg-prev" aria-label="向左滑动查看宽带" type="button">‹</button>
+      <div class="pkg-grid pkg-scroll" id="kdGrid">
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-t">中国电信</div>
+        <div class="cname">山东电信 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">840</span><span class="u">/年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 840元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">山东专属</span><span class="chip">单宽带</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342783&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-u">中国联通</div>
+        <div class="cname">苏州联通 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">59</span><span class="u">/月</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 月租 59元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">苏州专属</span><span class="chip">含 140G+990分钟</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342657&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-m">中国移动</div>
+        <div class="cname">南京移动 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">108</span><span class="u">/月</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 月租 108元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">南京专属</span><span class="chip">含 100G+1000分钟</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342655&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">山东电信 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">山东专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342542&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-u">中国联通</div>
+        <div class="cname">山东联通 500M</div>
+        <div class="price"><span class="y">¥</span><span class="v">600</span><span class="u">/年</span></div>
+        <div class="flow"><b>500M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 500M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 600元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">山东专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342866&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">湖北电信 200M</div>
+        <div class="price"><span class="y">¥</span><span class="v">599</span><span class="u">/年</span></div>
+        <div class="flow"><b>200M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 599元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">湖北专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342545&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">江西电信 200M</div>
+        <div class="price"><span class="y">¥</span><span class="v">600</span><span class="u">/年</span></div>
+        <div class="flow"><b>200M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 600元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">江西专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342543&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">河南电信 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">540</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 540元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">河南专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342553&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">福建电信 200M</div>
+        <div class="price"><span class="y">¥</span><span class="v">540</span><span class="u">/年</span></div>
+        <div class="flow"><b>200M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 540元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">福建专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342539&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-m">中国移动</div>
+        <div class="cname">武汉移动 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">430</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 430元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">武汉专属</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342560&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">广西电信 500M</div>
+        <div class="price"><span class="y">¥</span><span class="v">499</span><span class="u">/年</span></div>
+        <div class="flow"><b>500M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 500M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 499元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">广西专属</span><span class="chip">超值宽带</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342635&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-m">中国移动</div>
+        <div class="cname">广东移动 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">广东专属</span><span class="chip">按页面说明</span></div>
+        <a href="https://hk.ksjhaoka.com/show?id=82342743&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg more-card">
+        <div class="more-inner">
+          <div class="more-icon" aria-hidden="true">⋯</div>
+          <div class="more-title">更多宽带</div>
+          <div class="more-desc">查看店铺全部在推宽带</div>
+          <a href="https://hk.ksjhaoka.com/?s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>
+        </div>
+      </div>
+      </div>
+      <button class="pkg-nav pkg-next" aria-label="向右滑动查看宽带" type="button">›</button>
+    </div>
+    <div class="sub-row-head">
+      <span class="sub-tag">速联惠 · 宽带广场</span>
+      <span class="sub-note">套餐随运营商政策更新，以办理页为准<span id="kdSync2" class="pkg-sync">· 数据更新于 11-09 09:22</span></span>
+    </div>
+    <div class="pkg-carousel">
+      <button class="pkg-nav pkg-prev" aria-label="向左滑动查看宽带" type="button">‹</button>
+      <div class="pkg-grid pkg-scroll" id="kdGrid2">
+      <div class="pkg feature" data-prov="重庆">
+  <div class="badge">千兆</div>
+  <div class="op op-m">中国移动</div>
+  <div class="cname">重庆移动 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">580</span><span class="u">/年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 580元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">重庆专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=37baa0298b59eac0" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="四川">
+  <div class="badge">千兆</div>
+  <div class="op op-g">中国广电</div>
+  <div class="cname">四川广电 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">600</span><span class="u">/年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 600元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">四川专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-60 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=c23144f42180c203" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="四川">
+  <div class="badge">千兆</div>
+  <div class="op op-g">中国广电</div>
+  <div class="cname">四川广电 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">700</span><span class="u">/年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 700元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">四川专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-60 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=ce869fd5bafdb562" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="安徽">
+  <div class="badge">千兆</div>
+  <div class="op op-g">中国广电</div>
+  <div class="cname">安徽广电 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">1440</span><span class="u">/2年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 两年 1440元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">安徽专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=a71fb0df7d485fee" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="云南">
+  <div class="badge">千兆</div>
+  <div class="op op-m">中国移动</div>
+  <div class="cname">云南移动 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">1080</span><span class="u">/年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 1080元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 免安装费</li></ul>
+  <div class="chips"><span class="chip">云南专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=b65f662984fc3246" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="北京">
+  <div class="badge">千兆</div>
+  <div class="op op-u">中国联通</div>
+  <div class="cname">北京联通 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">179</span><span class="u">/月</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 月费 179元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">北京专属</span><span class="chip">融合套餐</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-60 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=aa0be7277eb6a23c" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="北京">
+  <div class="badge">千兆</div>
+  <div class="op op-u">中国联通</div>
+  <div class="cname">北京联通 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">149</span><span class="u">/月</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 月费 149元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">北京专属</span><span class="chip">融合套餐</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-60 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=12ed98f508207e61" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="北京">
+  <div class="badge">千兆</div>
+  <div class="op op-u">中国联通</div>
+  <div class="cname">北京联通 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">149</span><span class="u">/月</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 月费 149元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">北京专属</span><span class="chip">融合套餐</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-60 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=14a9ef0ae55783fd" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg feature" data-prov="安徽">
+  <div class="badge">千兆</div>
+  <div class="op op-u">中国联通</div>
+  <div class="cname">安徽联通 1000M</div>
+  <div class="price"><span class="y">¥</span><span class="v">590</span><span class="u">/年</span></div>
+  <div class="flow"><b>1000M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 590元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">安徽专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=03f0ce195a6c5676" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+</div>
+            <div class="pkg" data-prov="江西">
+  <div class="op op-t">中国电信</div>
+  <div class="cname">江西电信 100M</div>
+  <div class="price"><span class="y">¥</span><span class="v">360</span><span class="u">/年</span></div>
+  <div class="flow"><b>100M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 100M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 360元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">江西专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=f944a056960a44f0" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="重庆">
+  <div class="op op-m">中国移动</div>
+  <div class="cname">重庆移动 300M</div>
+  <div class="price"><span class="y">¥</span><span class="v">360</span><span class="u">/年</span></div>
+  <div class="flow"><b>300M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 360元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">重庆专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=96d09b346360a334" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="福建">
+  <div class="op op-t">中国电信</div>
+  <div class="cname">福建电信 200M</div>
+  <div class="price"><span class="y">¥</span><span class="v">540</span><span class="u">/年</span></div>
+  <div class="flow"><b>200M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 540元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">福建专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=bd2111217709f596" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="江西">
+  <div class="op op-t">中国电信</div>
+  <div class="cname">江西电信 200M</div>
+  <div class="price"><span class="y">¥</span><span class="v">600</span><span class="u">/年</span></div>
+  <div class="flow"><b>200M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 600元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">江西专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=aa94164640dfa132" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="江西">
+  <div class="op op-t">中国电信</div>
+  <div class="cname">江西电信 500M</div>
+  <div class="price"><span class="y">¥</span><span class="v">1000</span><span class="u">/年</span></div>
+  <div class="flow"><b>500M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 500M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 1000元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">江西专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=eea39c5b1f880bbf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="云南">
+  <div class="op op-m">中国移动</div>
+  <div class="cname">云南移动 300M</div>
+  <div class="price"><span class="y">¥</span><span class="v">360</span><span class="u">/年</span></div>
+  <div class="flow"><b>300M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 360元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 免安装费</li></ul>
+  <div class="chips"><span class="chip">云南专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=4b43994d5bcae314" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="湖南">
+  <div class="op op-t">中国电信</div>
+  <div class="cname">湖南电信 300M</div>
+  <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+  <div class="flow"><b>300M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li></ul>
+  <div class="chips"><span class="chip">湖南专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=3540b895f0964ccb" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg" data-prov="云南">
+  <div class="op op-m">中国移动</div>
+  <div class="cname">云南移动 300M</div>
+  <div class="price"><span class="y">¥</span><span class="v">360</span><span class="u">/年</span></div>
+  <div class="flow"><b>300M</b> 宽带速率</div>
+  <ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 360元</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 免安装费</li></ul>
+  <div class="chips"><span class="chip">云南专属</span><span class="chip">单宽带</span></div>
+  <div class="pkg-age"><span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>办理年龄 <b>18-65 周岁</b></div>
+  <a href="https://web.haokalingqu.com/pdetails?tk=9f5b7f0436902233&amp;pro=8ffffa212adc6d7d" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+</div>
+            <div class="pkg more-card">
+        <div class="more-inner">
+          <div class="more-icon" aria-hidden="true">⋯</div>
+          <div class="more-title">更多宽带</div>
+          <div class="more-desc">查看宽带广场全部在推宽带</div>
+          <a href="https://web.haokalingqu.com/home/9f5b7f0436902233" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>
+        </div>
+      </div>
+      </div>
+      <button class="pkg-nav pkg-next" aria-label="向右滑动查看宽带" type="button">›</button>
+    </div>
+    <div class="sub-row-head">
+      <span class="sub-tag">速联惠 · 选品广场</span>
+      <span class="sub-note">套餐随运营商政策更新，以办理页为准<span id="kdSync3" class="pkg-sync"></span></span>
+    </div>
+    <div class="pkg-carousel">
+      <button class="pkg-nav pkg-prev" aria-label="向左滑动查看宽带" type="button">‹</button>
+      <div class="pkg-grid pkg-scroll" id="kdGrid3">
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-u">中国联通</div>
+        <div class="cname">海南联通 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">1200</span><span class="u">/年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 1200元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">海南专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=74678346&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-t">中国电信</div>
+        <div class="cname">湖南电信 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">2400</span><span class="u">/2年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 两年 2400元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">湖南专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75403622&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-m">中国移动</div>
+        <div class="cname">云南移动 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">1080</span><span class="u">/年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 1080元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">云南专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75430969&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-t">中国电信</div>
+        <div class="cname">山东电信 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">840</span><span class="u">/年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 840元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">山东专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=74677538&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg feature">
+        <div class="badge">千兆</div>
+        <div class="op op-u">中国联通</div>
+        <div class="cname">浙江联通 1000M</div>
+        <div class="price"><span class="y">¥</span><span class="v">1200</span><span class="u">/年</span></div>
+        <div class="flow"><b>1000M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 1000M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 1200元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">浙江专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75360394&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-m">中国移动</div>
+        <div class="cname">云南移动 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">580</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 580元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">云南专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75430967&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-g">中国广电</div>
+        <div class="cname">重庆广电 100M</div>
+        <div class="price"><span class="y">¥</span><span class="v">240</span><span class="u">/2年</span></div>
+        <div class="flow"><b>100M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 100M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 两年 240元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">重庆专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75688566&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">深圳电信 200M</div>
+        <div class="price"><span class="y">¥</span><span class="v">800</span><span class="u">/年</span></div>
+        <div class="flow"><b>200M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 800元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 免安装费</li>
+        </ul>
+        <div class="chips"><span class="chip">深圳专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=74677858&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">山东电信 500M</div>
+        <div class="price"><span class="y">¥</span><span class="v">600</span><span class="u">/年</span></div>
+        <div class="flow"><b>500M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 500M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 600元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 以办理页说明为准</li>
+        </ul>
+        <div class="chips"><span class="chip">山东专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=74677537&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-u">中国联通</div>
+        <div class="cname">浙江联通 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">浙江专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75360392&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-u">中国联通</div>
+        <div class="cname">上海联通 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">上海专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75380774&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-t">中国电信</div>
+        <div class="cname">福建电信 100M</div>
+        <div class="price"><span class="y">¥</span><span class="v">480</span><span class="u">/年</span></div>
+        <div class="flow"><b>100M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 100M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 480元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">福建专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75390102&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-u">中国联通</div>
+        <div class="cname">北京联通 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">880</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 880元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 免安装费</li>
+        </ul>
+        <div class="chips"><span class="chip">北京专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75442234&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-m">中国移动</div>
+        <div class="cname">北京移动 300M</div>
+        <div class="price"><span class="y">¥</span><span class="v">680</span><span class="u">/年</span></div>
+        <div class="flow"><b>300M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 300M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 年费 680元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">北京专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75438709&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg">
+        <div class="op op-g">中国广电</div>
+        <div class="cname">重庆广电 200M</div>
+        <div class="price"><span class="y">¥</span><span class="v">360</span><span class="u">/2年</span></div>
+        <div class="flow"><b>200M</b> 宽带速率</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 200M 高速宽带</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 两年 360元</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span> 提供光猫</li>
+        </ul>
+        <div class="chips"><span class="chip">重庆专属</span><span class="chip">单宽带</span></div>
+        <a href="https://tui.haoyiapp.com/#/pages/goods/details?goods_id=75688567&amp;share_id=1827756" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a>
+      </div>
+      <div class="pkg more-card">
+        <div class="more-inner">
+          <div class="more-icon" aria-hidden="true">⋯</div>
+          <div class="more-title">更多宽带</div>
+          <div class="more-desc">查看店铺全部在推宽带</div>
+          <a href="https://tui.haoyiapp.com/#/pages/micro_store/index?agent_id=eb19b7db930317cc2210db56129c38e0" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>
+        </div>
+      </div>
+      </div>
+      <button class="pkg-nav pkg-next" aria-label="向右滑动查看宽带" type="button">›</button>
+    </div>
+    <p class="pkg-note">注：宽带安装范围、资费与办理规则以办理时页面为准。点击卡片直达店铺办理。</p>
+    <p class="scroll-hint"><span>← 左右滑动查看更多宽带 →</span></p>
+  </div>
+</section>
+
+<!-- ============ VIP / 会员卡券专区 ============ -->
+<section id="vip">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">会员卡券</div>
+      <h2>会员权益 · 精选卡券</h2>
+      <p>会员与卡券实时同步自店铺，到手价以办理页为准。</p>
+    </div>
+    <div class="sub-row-head first-row">
+      <span class="sub-tag">速联惠 · 大牌会员</span>
+      <span class="sub-note">价格优惠随时更新，以办理页为准<span id="vipSync" class="pkg-sync"></span></span>
+    </div>
+    <div class="pkg-carousel">
+      <button class="pkg-nav pkg-prev" aria-label="向左滑动查看会员" type="button">‹</button>
+      <div class="pkg-grid pkg-scroll" id="vipGrid1">
+      <div class="pkg feature"><div class="badge">超值</div><div class="op op-vip">醒图</div><div class="cname">醒图svip会员月卡</div><div class="price"><span class="y">¥</span><span class="v">11.14</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥48</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥48 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">办公设计</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4337&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">超值</div><div class="op op-vip">芒果TV</div><div class="cname">芒果TV视频会员月卡</div><div class="price"><span class="y">¥</span><span class="v">16</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥30</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥30 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4261&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">超值</div><div class="op op-vip">网易云音乐</div><div class="cname">网易云黑胶会员月卡</div><div class="price"><span class="y">¥</span><span class="v">10.43</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥18</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥18 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4390&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">超值</div><div class="op op-vip">知乎盐选</div><div class="cname">知乎盐选会员月卡</div><div class="price"><span class="y">¥</span><span class="v">15.32</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥25</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥25 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">生活权益</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4407&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">超值</div><div class="op op-vip">优酷</div><div class="cname">优酷视频黄金会员月卡</div><div class="price"><span class="y">¥</span><span class="v">20.59</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥30</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥30 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4248&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">QQ</div><div class="cname">QQ会员月卡</div><div class="price"><span class="y">¥</span><span class="v">13.9</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥14 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">腾讯业务</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4265&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">哔哩哔哩</div><div class="cname">哔哩哔哩大会员月卡</div><div class="price"><span class="y">¥</span><span class="v">19.49</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥25</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥25 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4244&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">QQ黄钻</div><div class="cname">QQ黄钻月卡</div><div class="price"><span class="y">¥</span><span class="v">13.82</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥14 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">腾讯业务</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4276&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">丰巢</div><div class="cname">丰巢基础会员月卡</div><div class="price"><span class="y">¥</span><span class="v">6.19</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥5 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">生活权益</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4305&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">即梦Ai</div><div class="cname">即梦Ai基础会员月卡</div><div class="price"><span class="y">¥</span><span class="v">69.99</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥79</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥79 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">办公设计</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4324&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">爱奇艺</div><div class="cname">爱奇艺黄金会员月卡</div><div class="price"><span class="y">¥</span><span class="v">25.28</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥30</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 到账见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥30 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4257&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">腾讯</div><div class="cname">腾讯视频VIP会员月卡</div><div class="price"><span class="y">¥</span><span class="v">27.99</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥35</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥35 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4236&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">汽水音乐</div><div class="cname">汽水音乐VIP会员月卡</div><div class="price"><span class="y">¥</span><span class="v">8</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥8 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4793&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">百度网盘</div><div class="cname">百度网盘VIP月卡</div><div class="price"><span class="y">¥</span><span class="v">25</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥25 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">网盘存储</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4752&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">百度搭子</div><div class="cname">百度搭子Pro版会员月卡</div><div class="price"><span class="y">¥</span><span class="v">59</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥59 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">生活权益</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4796&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">QQ音乐</div><div class="cname">QQ音乐豪华绿钻VIP月卡</div><div class="price"><span class="y">¥</span><span class="v">16.88</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥20</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥20 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4279&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">剪映</div><div class="cname">剪映VIP会员月卡</div><div class="price"><span class="y">¥</span><span class="v">19.9</span><span class="u">/月卡</span></div><div class="flow"><b>面值 ¥25</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 到账见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥25 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">办公设计</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4315&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-vip">KEEP</div><div class="cname">keep会员月卡</div><div class="price"><span class="y">¥</span><span class="v">30</span><span class="u">/月卡</span></div><div class="flow"><b>月卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥30 · 到账见办理页</li></ul><div class="chips"><span class="chip">月卡</span><span class="chip">生活权益</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4291&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg more-card"><div class="more-inner"><div class="more-icon" aria-hidden="true">⋯</div><div class="more-title">更多会员权益</div><div class="more-desc">查看店铺全部在推会员</div><a href="https://vip.ksjhaoka.com/?s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a></div></div>
+      </div>
+      <button class="pkg-nav pkg-next" aria-label="向右滑动查看会员" type="button">›</button>
+    </div>
+    <div class="sub-row-head">
+      <span class="sub-tag">速联惠 · 精选卡券</span>
+      <span class="sub-note">价格优惠随时更新，以办理页为准<span id="vipSync2" class="pkg-sync"></span></span>
+    </div>
+    <div class="pkg-carousel">
+      <button class="pkg-nav pkg-prev" aria-label="向左滑动查看卡券" type="button">‹</button>
+      <div class="pkg-grid pkg-scroll" id="vipGrid2">
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">汽水音乐</div><div class="cname">汽水音乐VIP会员周卡</div><div class="price"><span class="y">¥</span><span class="v">3</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥10</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥10 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4499&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">网易云音乐</div><div class="cname">网易云黑胶会员周卡</div><div class="price"><span class="y">¥</span><span class="v">5.87</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥8</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥8 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4391&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">汽水音乐</div><div class="cname">汽水音乐svip会员周卡</div><div class="price"><span class="y">¥</span><span class="v">6</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥10</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥10 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4498&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">美团外卖</div><div class="cname">美团外卖通用红包10元</div><div class="price"><span class="y">¥</span><span class="v">7.57</span><span class="u">/张</span></div><div class="flow"><b>面值 ¥10</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥10 · 到账见办理页</li></ul><div class="chips"><span class="chip">卡券</span><span class="chip">美食卡券</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4350&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">芒果TV</div><div class="cname">芒果TV视频会员周卡</div><div class="price"><span class="y">¥</span><span class="v">8.78</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥10</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 按需充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥10 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4262&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">哔哩哔哩</div><div class="cname">哔哩哔哩大会员周卡</div><div class="price"><span class="y">¥</span><span class="v">8.82</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥15</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 到账见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥15 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4245&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">淘宝团购</div><div class="cname">饿了么外卖红包10元</div><div class="price"><span class="y">¥</span><span class="v">8.88</span><span class="u">/张</span></div><div class="flow"><b>面值 ¥10</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 到账见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥10 · 到账见办理页</li></ul><div class="chips"><span class="chip">卡券</span><span class="chip">美食卡券</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4353&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">肯德基</div><div class="cname">肯德基 一个原味冰淇淋</div><div class="price"><span class="y">¥</span><span class="v">9</span><span class="u">/张</span></div><div class="flow"><b>卡券</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥9 · 到账见办理页</li></ul><div class="chips"><span class="chip">卡券</span><span class="chip">美食卡券</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4415&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg feature"><div class="badge">精选</div><div class="op op-coupon">QQ音乐</div><div class="cname">QQ音乐豪华绿钻VIP周卡</div><div class="price"><span class="y">¥</span><span class="v">9.79</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥15</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥15 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">音乐听书</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4280&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">夸克网盘</div><div class="cname">夸克网盘超级会员周卡</div><div class="price"><span class="y">¥</span><span class="v">11.81</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥13</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按需充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥13 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">网盘存储</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4377&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">爱奇艺</div><div class="cname">爱奇艺黄金会员周卡</div><div class="price"><span class="y">¥</span><span class="v">13</span><span class="u">/周卡</span></div><div class="flow"><b>周卡</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥13 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4258&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">腾讯</div><div class="cname">腾讯视频VIP会员周卡</div><div class="price"><span class="y">¥</span><span class="v">15.58</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥20</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥20 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">影视会员</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4237&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">剪映</div><div class="cname">剪映VIP会员周卡</div><div class="price"><span class="y">¥</span><span class="v">18.54</span><span class="u">/周卡</span></div><div class="flow"><b>面值 ¥20</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥20 · 到账见办理页</li></ul><div class="chips"><span class="chip">周卡</span><span class="chip">办公设计</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4316&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">淘宝团购</div><div class="cname">饿了么外卖红包20元</div><div class="price"><span class="y">¥</span><span class="v">18.88</span><span class="u">/张</span></div><div class="flow"><b>面值 ¥20</b> 以办理页为准</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 按办理页充值 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥20 · 到账见办理页</li></ul><div class="chips"><span class="chip">卡券</span><span class="chip">美食卡券</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4352&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg"><div class="op op-coupon">美团外卖</div><div class="cname">美团外卖通用红包20元</div><div class="price"><span class="y">¥</span><span class="v">20</span><span class="u">/张</span></div><div class="flow"><b>卡券</b> 按办理页充值</div><ul><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 到账见办理页 · 按办理页充值</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 详见办理页 · 详见办理页</li><li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg></span> 面值 ¥20 · 到账见办理页</li></ul><div class="chips"><span class="chip">卡券</span><span class="chip">美食卡券</span></div><a href="https://vip.ksjhaoka.com/pages/coupon/detail?id=4349&amp;s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">立即办理</a></div>
+      <div class="pkg more-card"><div class="more-inner"><div class="more-icon" aria-hidden="true">⋯</div><div class="more-title">更多卡券</div><div class="more-desc">按办理页展示</div><a href="https://vip.ksjhaoka.com/pages/coupon/cheap?s=2ib84HsK4041" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a></div></div>
+      </div>
+      <button class="pkg-nav pkg-next" aria-label="向右滑动查看卡券" type="button">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLOW ============ -->
+<section id="flow" class="steps">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">办理流程</div>
+      <h2>三步即可完成，简单明了</h2>
+    </div>
+    <div class="step-grid">
+      <div class="step"><div class="n">01</div><h4>选择产品</h4><p>在线选择宽带或会员权益，查看页面说明。</p></div>
+      <div class="step"><div class="n">02</div><h4>确认规则</h4><p>核对资费、合约期与适用条件，确认后再提交。</p></div>
+      <div class="step"><div class="n">03</div><h4>按指引使用</h4><p>按办理页说明完成开通，售后由对应服务提供方负责。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand">
+        <span class="mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.9a12 12 0 0 1 17 0" opacity=".5"/><path d="M6.8 13.6a7.6 7.6 0 0 1 10.4 0" opacity=".85"/><path d="M12 16.7c.45 1.5 1 2.05 2.5 2.5-1.5.45-2.05 1-2.5 2.5-.45-1.5-1-2.05-2.5-2.5 1.5-.45 2.05-1 2.5-2.5z" fill="currentColor" stroke="none"/></svg>
+        </span>
+        速联惠
+      </div>
+      <p>宽带与会员权益信息展示，多项产品可按需选择，具体资费与办理条件以办理页说明为准。</p>
+    </div>
+    <div>
+      <h5>主营业务</h5>
+      <a href="#services">宽带办理</a>
+      <a href="#services">会员办理</a>
+    </div>
+    <div>
+      <h5>帮助中心</h5>
+      <a href="#flow">办理流程</a>
+      <a href="#adv">服务优势</a>
+      <a href="#broadband">宽带专区</a>
+    </div>
+    <div>
+      <h5>联系我们</h5>
+      <a href="#" class="lnk-empty" data-empty="1">联系客服</a>
+      <a href="#" class="lnk-empty" data-empty="1">在线咨询</a>
+      <a href="#" class="lnk-empty" data-empty="1">合作洽谈</a>
+    </div>
+  </div>
+  <div class="wrap copy">
+    <span>© 2026 速联惠</span>
+    <span>用心甄选 · 为你所爱</span>
+  </div>
+  <div class="wrap disclaimer">
+    <p><strong>免责声明</strong>：本站由速联惠自主运营，仅作宽带与会员权益的信息展示与办理引导，不提供电话卡销售、代办开卡或售卡引流服务。本站非中国移动、中国联通、中国电信、中国广电官方渠道，与上述运营商无隶属或授权关系；页面中出现的运营商名称与标识仅用于说明产品所归属的网络来源。页面展示的宽带资费、会员权益、价格、优惠与办理条件仅供参考，可能随运营商政策与渠道调整，最终以运营商官方公示及实际办理页面为准；办理前请仔细阅读资费说明、合约期与业务规则。通过本站链接跳转至第三方页面后产生的办理、售后及争议，由对应服务提供方负责。如内容涉及侵权，请联系我们及时处理。</p>
+  </div>
+</footer>
+
+<!-- 返回顶部悬浮按钮 -->
+<button id="backTop" class="back-top" type="button" aria-label="返回顶部" title="返回顶部">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- 时间戳：页面打开即写入本地数据时刻，避免接口未返回或失败时留白 -->
+<script>
+(function(){
+  window.stampAt=function(tpl){
+    var d=new Date(),p=function(n){return(n<10?'0':'')+n;};
+    return tpl.replace('{t}',p(d.getHours())+':'+p(d.getMinutes()));
+  };
+  /* 各接口年龄字段格式不同：age_limit='18-65岁' / age_rule=['18','65'] / age_min+age_max */
+  window.ageRange=function(min,max){
+    var a=String(min==null?'':min).trim(),b=String(max==null?'':max).trim();
+    var m=a.match(/(\d{1,3})\s*[-~—－至到]\s*(\d{1,3})/);
+    if(m){a=m[1];b=m[2];}
+    a=a.replace(/[^0-9]/g,'');b=b.replace(/[^0-9]/g,'');
+    if(/^\d+$/.test(a)&&/^\d+$/.test(b)&&+a>=10&&+b>=+a&&+b<=99)return a+'-'+b+' 周岁';
+    return '';
+  };
+  var AGE_ICO='<span class="age-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5.5 20c0-3.7 2.9-6.2 6.5-6.2s6.5 2.5 6.5 6.2"/></svg></span>';
+  window.ageLine=function(min,max){
+    var t=window.ageRange(min,max);
+    return '<div class="pkg-age'+(t?'':' fallback')+'">'+AGE_ICO+'办理年龄 <b>'+(t||'以办理页为准')+'</b></div>';
+  };
+  var init=window.stampAt('· 已于 {t} 载入');
+  document.querySelectorAll('.pkg-sync').forEach(function(el){if(!el.textContent)el.textContent=init;});
+})();
+</script>
+
+<!-- 宽带 / 会员专区数据同步 -->
+<script>
+(function(){
+  var STORE_ID='2ib84HsK4041';
+  var API='https://hk.ksjhaoka.com/api/index/goods/index?store_id='+STORE_ID;
+  var BASE='https://hk.ksjhaoka.com';
+  var OPS={'广电':'g','电信':'t','联通':'u','移动':'m'};
+  var OP_LABEL={'广电':'中国广电','电信':'中国电信','联通':'中国联通','移动':'中国移动','其他':'运营商'};
+  function detectOp(n){for(var k in OPS){if(n.indexOf(k)>=0)return k;}return '其他';}
+  function tick(){return '<span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg></span>';}
+  function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  // 横向滚动箭头按钮（支持多个轮播）
+  function navStep(sc){return Math.max(280,Math.round((sc?sc.clientWidth:0)*0.8));}
+  /* 旧 Safari / WebView 不支持 scrollBy(options)，特性检测后回退到 scrollLeft */
+  var canSmoothBy=('scrollBehavior' in document.documentElement.style);
+  function stepScroll(sc,delta){
+    if(canSmoothBy){try{sc.scrollBy({left:delta,behavior:'smooth'});return;}catch(e){}}
+    sc.scrollLeft+=delta;
+  }
+  var allNavs=[];
+  document.querySelectorAll('.pkg-carousel').forEach(function(root){
+    var sc=root.querySelector('.pkg-scroll'),prev=root.querySelector('.pkg-prev'),next=root.querySelector('.pkg-next');
+    if(!sc)return;
+    function updateNav(){var max=sc.scrollWidth-sc.clientWidth-1;if(prev){prev.style.opacity=sc.scrollLeft<=2?0.35:1;prev.style.cursor=sc.scrollLeft<=2?'default':'pointer';}if(next){next.style.opacity=sc.scrollLeft>=max?0.35:1;next.style.cursor=sc.scrollLeft>=max?'default':'pointer';}}
+    allNavs.push(updateNav);
+    if(prev)prev.addEventListener('click',function(){stepScroll(sc,-navStep(sc));});
+    if(next)next.addEventListener('click',function(){stepScroll(sc,navStep(sc));});
+    sc.addEventListener('scroll',updateNav,window.slPassive);
+    window.addEventListener('resize',updateNav);
+    updateNav();
+  });
+  function updateAllNav(){for(var i=0;i<allNavs.length;i++)allNavs[i]();}
+
+  /* ---------- 宽带专区第三行：共用微店数据接口 ---------- */
+  var HY_AGENT='eb19b7db930317cc2210db56129c38e0';
+  var HY_API='https://h5d.lianhengkj.com/v11/micro_store_list/page_goods?agent_id='+HY_AGENT+'&page=';
+  var HY_STORE='https://tui.haoyiapp.com/#/pages/micro_store/index?agent_id='+HY_AGENT;
+  var HY_LIMIT=15;
+  var HY_OPS=[['广电','g','中国广电'],['电信','t','中国电信'],['联通','u','中国联通'],['移动','m','中国移动']];
+  function hyOp(n){
+    for(var i=0;i<HY_OPS.length;i++){if(n.indexOf(HY_OPS[i][0])>=0)return {k:HY_OPS[i][1],label:HY_OPS[i][2]};}
+    return {k:'其他',label:'精选宽带'};
+  }
+  function hyPage(p){
+    var req=fetch(HY_API+p,{headers:{'Accept':'application/json'}})
+      .then(function(r){return r.json();})
+      .then(function(j){return (j&&j.data&&j.data.length!==undefined)?j:null;})
+      .catch(function(){return null;});
+    var timer=new Promise(function(res){setTimeout(function(){res(null);},12000);});
+    return Promise.race([req,timer]);
+  }
+  /* ---------- 宽带专区第三行：速联惠 · 选品广场 · 实时同步在推宽带 ---------- */
+  var HB_LIMIT=15,HB_HOT=5;
+  /* 「更多宽带」统一指向店铺首页，与卡片入口保持一致 */
+  var HB_STORE=HY_STORE;
+  var HB_PROVS=['北京','天津','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海','江苏','浙江',
+    '安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南',
+    '西藏','陕西','甘肃','青海','宁夏','新疆'];
+  function hbInfo(x){
+    var n=x.p_goods_name||'',c=x.config||{};
+    var pm=n.match(/(\d+(?:\.\d+)?)元/),amt=pm?pm[1]:'0';
+    var sm=n.match(/(\d{2,4})M/),spd=sm?parseInt(sm[1],10):0;
+    var unit=/包\s*3\s*年|3年/.test(n)?'3年':(/包\s*2\s*年|2年/.test(n)?'2年':'年');
+    var op=hyOp(n),opk=(op.k==='其他')?'t':op.k,label=(op.k==='其他')?'精选宽带':op.label;
+    var sub=(c.goods_subtitle||'').replace('只发','').split(/[（(]/)[0].trim(),prov='';
+    if(sub&&sub.length<=4)prov=sub;
+    else{for(var i=0;i<HB_PROVS.length;i++){if(n.indexOf(HB_PROVS[i])>=0){prov=HB_PROVS[i];break;}}}
+    if(!prov)prov='全国';
+    var sell=(x.settle_accounts_msg||[])[0]||'',li3='以办理页说明为准';
+    if(sell.indexOf('免安装费')>=0)li3='免安装费';
+    else if(sell.indexOf('不绑卡')>=0)li3='不绑卡 无合约';
+    else if(sell.indexOf('光猫')>=0)li3='提供光猫';
+    else if(sell.indexOf('上门安装')>=0)li3='上门安装';
+    return {amt:amt,spd:spd,unit:unit,opk:opk,label:label,prov:prov,li3:li3,
+            hot:spd>=1000,url:x.copy||HY_STORE};
+  }
+  function hbCard(x){
+    var d=hbInfo(x),rate=d.spd?d.spd+'M':'高速';
+    var ut={'年':'年费','2年':'两年','3年':'三年'}[d.unit];
+    var uh={'年':'/年','2年':'/2年','3年':'/3年'}[d.unit];
+    var lis=[rate+' 高速宽带',ut+' '+d.amt+'元',d.li3]
+      .map(function(t){return '<li>'+tick()+' '+esc(t)+'</li>';}).join('');
+    return '<div class="pkg'+(d.hot?' feature':'')+'">'+(d.hot?'<div class="badge">千兆</div>':'')+
+      '<div class="op op-'+d.opk+'">'+esc(d.label)+'</div>'+
+      '<div class="cname">'+esc(d.prov+d.label.replace('中国','')+' '+rate)+'</div>'+
+      '<div class="price"><span class="y">¥</span><span class="v">'+esc(d.amt)+'</span><span class="u">'+esc(uh)+'</span></div>'+
+      '<div class="flow"><b>'+rate+'</b> 宽带速率</div>'+
+      '<ul>'+lis+'</ul>'+
+      '<div class="chips"><span class="chip">'+esc(d.prov+'专属')+'</span><span class="chip">单宽带</span></div>'+
+      window.ageLine(x.age_min,x.age_max)+
+      '<a href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" class="btn '+(d.hot?'btn-primary':'btn-ghost')+'">立即办理</a>'+
+      '</div>';
+  }
+  function hbMore(){
+    return '<div class="pkg more-card"><div class="more-inner">'+
+      '<div class="more-icon" aria-hidden="true">⋯</div>'+
+      '<div class="more-title">更多宽带</div>'+
+      '<div class="more-desc">查看店铺全部在推宽带</div>'+
+      '<a href="'+esc(HB_STORE)+'" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>'+
+      '</div></div>';
+  }
+  function hbStamp(t){var el=document.getElementById('kdSync3');if(el)el.textContent=t;}
+  function hbRank(arr){
+    return arr.map(function(x,i){return {x:x,i:i,hi:parseInt(x.home_index,10)||0};})
+      .sort(function(a,b){return a.hi-b.hi||a.i-b.i;}).map(function(o){return o.x;});
+  }
+  function hbRender(list){
+    var all=list.filter(function(x){return x&&x.category_id==8&&x.micro_store_status==1&&
+      (x.p_goods_name||'').indexOf('元')>=0&&/\d{2,4}M/.test(x.p_goods_name||'');});
+    var hot=hbRank(all.filter(function(x){return hbInfo(x).hot;}));
+    var rest=hbRank(all.filter(function(x){return !hbInfo(x).hot;}));
+    var hn=Math.min(HB_HOT,hot.length);
+    var cards=hot.slice(0,hn).concat(rest.slice(0,HB_LIMIT-hn));
+    if(cards.length<HB_LIMIT)cards=cards.concat(hot.slice(hn,hn+HB_LIMIT-cards.length));
+    if(!cards.length)throw new Error('empty');
+    var grid=document.getElementById('kdGrid3');if(!grid)return;
+    grid.innerHTML=cards.map(hbCard).join('')+hbMore();
+    var d=new Date(),z=function(n){return(n<10?'0':'')+n;};
+    hbStamp('· 已于 '+z(d.getHours())+':'+z(d.getMinutes())+' 同步');
+    updateAllNav();
+  }
+  var HY_ALL=hyPage(1).then(function(first){
+    if(!first)throw new Error('page1');
+    var last=Math.min(parseInt(first.last_page,10)||1,20),rest=[];
+    for(var p=2;p<=last;p++)rest.push(hyPage(p));
+    return Promise.all(rest).then(function(rs){return [first].concat(rs);});
+  }).then(function(pages){
+    for(var i=0;i<pages.length;i++){if(!pages[i])throw new Error('partial');}
+    var all=[];pages.forEach(function(j){all=all.concat(j.data||[]);});
+    return all;
+  });
+  HY_ALL.then(function(all){hbRender(all);})
+    .catch(function(){       // 请求失败时保留内置静态宽带兜底
+      hbStamp(window.stampAt('· 已于 {t} 载入缓存'));
+      updateAllNav();
+    });
+
+  /* ---------- 宽带专区：实时同步店铺在推宽带 ---------- */
+  var KD_STORE=BASE+'/?s='+STORE_ID;
+  function kdProv(n){
+    var m=(n||'').match(/^(.*?)(?:省|市)?宽带/);
+    return m?m[1].replace(/(?:省单|市单|单|省|市)$/,''):'';
+  }
+  function kdFee(x){
+    var amt='',unit='',ts=x.tabs||[];
+    for(var i=0;i<ts.length;i++){
+      var m=ts[i].name.match(/^(?:月租|年租|资费)[:：]\s*(\d+)\s*元(?:\/(年|月))?/);
+      if(m){amt=m[1];unit=m[2]||'';break;}
+    }
+    if(!amt){var q=(x.name||'').match(/(\d+)元/);amt=q?q[1]:'0';}
+    if(!unit)unit=(x.name||'').indexOf('年享')>=0?'年':'月';
+    return {amt:amt,unit:unit};
+  }
+  function kdSpeed(x){
+    var ts=x.tabs||[];
+    for(var i=0;i<ts.length;i++){
+      var m=ts[i].name.match(/(\d+)\s*(?:Mbps|M)/);
+      if(m)return {v:m[1]+'M',n:parseInt(m[1],10)||0};
+    }
+    return {v:'0M',n:0};
+  }
+  function kdBundle(x){
+    var m=(x.name||'').match(/(\d+G\+\d+分钟)/);if(m)return m[1];
+    var ts=x.tabs||[];for(var i=0;i<ts.length;i++){var q=ts[i].name.match(/(\d+G\+\d+分钟)/);if(q)return q[1];}
+    return '';
+  }
+  function kdExtra(x,prov,bundle){
+    if(bundle)return '含 '+bundle;
+    var ts=x.tabs||[];
+    for(var i=0;i<ts.length;i++){
+      var n=ts[i].name;
+      if(/^(月租|年租|资费|网速|宽带|套餐)/.test(n))continue;
+      var z=n.replace(/[！!]/g,'');
+      if(prov)z=z.split(prov+'专属').join('');
+      if(!z||z==='宽带'||z==='专属')continue;
+      return z.slice(0,10);
+    }
+    return '';
+  }
+  function kdCard(x){
+    var name=x.name||'',prov=kdProv(name),op=detectOp(name),fee=kdFee(x),sp=kdSpeed(x),bundle=kdBundle(x),hot=sp.n>=1000;
+    var short={'广电':'广电','电信':'电信','联通':'联通','移动':'移动','其他':'宽带'}[op];
+    var lis=[sp.v+' 高速宽带',(fee.unit==='年'?'年费 ':'月租 ')+fee.amt+'元','以办理页说明为准']
+      .map(function(t){return '<li>'+tick()+' '+esc(t)+'</li>';}).join('');
+    var chips='<span class="chip">'+esc((prov||'全国')+'专属')+'</span>';
+    var ex=kdExtra(x,prov,bundle);if(ex)chips+='<span class="chip">'+esc(ex)+'</span>';
+    var url=BASE+'/show?id='+encodeURIComponent(x.id)+'&s='+STORE_ID;
+    var opk=(op==='其他')?'其他':OPS[op];
+    return '<div class="pkg'+(hot?' feature':'')+'">'+(hot?'<div class="badge">千兆</div>':'')+
+      '<div class="op op-'+opk+'">'+esc(OP_LABEL[op])+'</div>'+
+      '<div class="cname">'+esc(prov+short+' '+sp.v)+'</div>'+
+      '<div class="price"><span class="y">¥</span><span class="v">'+esc(fee.amt)+'</span><span class="u">/'+esc(fee.unit)+'</span></div>'+
+      '<div class="flow"><b>'+sp.v+'</b> 宽带速率</div>'+
+      '<ul>'+lis+'</ul>'+
+      '<div class="chips">'+chips+'</div>'+
+      window.ageLine(x.age_limit||(x.age_rule||[]).join('-'))+
+      '<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" class="btn '+(hot?'btn-primary':'btn-ghost')+'">立即办理</a>'+
+      '</div>';
+  }
+  function kdMore(){
+    return '<div class="pkg more-card"><div class="more-inner">'+
+      '<div class="more-icon" aria-hidden="true">⋯</div>'+
+      '<div class="more-title">更多宽带</div>'+
+      '<div class="more-desc">查看店铺全部在推宽带</div>'+
+      '<a href="'+esc(KD_STORE)+'" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>'+
+      '</div></div>';
+  }
+  function kdStamp(t){var el=document.getElementById('kdSync');if(el)el.textContent=t;}
+  function kdRender(list){
+    var kd=list.filter(function(x){return (x.name||'').indexOf('宽带')>=0;});
+    if(!kd.length)throw new Error('empty');
+    kd=kd.map(function(x,i){return {x:x,i:i,f:(kdSpeed(x).n>=1000)?0:1};})
+      .sort(function(a,b){return a.f-b.f||a.i-b.i;})
+      .map(function(o){return o.x;});
+    var grid=document.getElementById('kdGrid');if(!grid)return;
+    grid.innerHTML=kd.map(kdCard).join('')+kdMore();
+    var d=new Date(),z=function(n){return(n<10?'0':'')+n;};
+    kdStamp('· 已于 '+z(d.getHours())+':'+z(d.getMinutes())+' 同步');
+    updateAllNav();
+  }
+  fetch(API,{headers:{'Accept':'application/json'}})
+    .then(function(r){return r.json();})
+    .then(function(j){if(j&&j.code===0&&j.data&&j.data.list){kdRender(j.data.list);}else{throw new Error('bad');}})
+    .catch(function(){       // 请求失败时保留内置静态宽带兜底
+      kdStamp(window.stampAt('· 已于 {t} 载入缓存'));
+      updateAllNav();
+    });
+
+  /* ---------- 会员卡券专区：实时同步权益商城 ---------- */
+  var VIP_PUB='MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwo5nKH5S5/7N1E+XE5U+mccsSVmuVIyABF1NFQcad9kbH92vy4+aS52lfbCwRJ1niBf9QGGzWsMmKwMI2CP8nkWXOAug6Aqud7NrLCiLDMAyYQOaUH6/eBG35Pb1pkSTgQ2mX/7OYe4pI7fHUc8OylS1Gop3jufC6hoB6FXAz2FTBEUhNa7yyl5sKO9YAjrLk7rbSHqS4M+T9CjS0c0ORjR8tPSqgMAdxpNNdPfzpm7h7jxCYQfid/Z+tG6YYluDFtvKJhbG/Y4C/q+jlxZ4DittnGVwGuCXUQ8ZkRKEsCRjLIvpDGycyLJY6S8RvliVG19sc0hYlUw9uzfxvmxqPMLvxxuqN6AOnV2aYGm+Rj1t8zBbq7PBwrEAFagElc+7WYsRrL74kDkQZK+Rg7XbQkwgatErZZmqcENFQhfp7uBqRn7RZvg2pux6W9q3b9qmZD0Wy/QNQfRsluZB/ItHXZVouJaC11tu30E1yLmBhPK/l0ixwEEloOk34gVror+j+7Ta9e6RqOL9p5W7EnN0imytso/Pe307OvNUfsWtgyturSvmFuWtq+uBco0BdqtQiXluqfLUdZ6UChHOTd4ulyb/XE3vmoGr1qP1b7pi83dDTBBPVG+pF3T1auL5AG7Hyu0i1ImAZqr5BwfVSSI34FqLnlluTcJwD66QeBBOyrsCAwEAAQ==';
+  var VIP_API='https://vip.ksjhaoka.com/api/index/kss/goods/index?sign=';
+  var VIP_STORE='https://vip.ksjhaoka.com/?s='+STORE_ID;
+  var VIP_CHEAP='https://vip.ksjhaoka.com/pages/coupon/cheap?s='+STORE_ID;
+  var VIP_LIMIT1=18,VIP_LIMIT2=15;
+  /* RSA PKCS#1 v1.5 公钥加密（浏览器原生 BigInt，无第三方库）；
+     旧浏览器缺少 BigInt 时会抛错，由外层 catch 回落到静态兜底卡片。 */
+  function vipTLV(u,st){
+    var i=st.i,tag=u[i++],len=u[i++];
+    if(len&0x80){var n=len&0x7f;len=0;while(n--)len=len*256+u[i++];}
+    st.i=i+len;return {start:i,len:len};
+  }
+  function vipRsaSign(plain){
+    var bin=atob(VIP_PUB),u=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+    var st={i:0},top=vipTLV(u,st);st.i=top.start;
+    vipTLV(u,st);                       // AlgorithmIdentifier
+    var bits=vipTLV(u,st);
+    var inner={i:bits.start+1},seq=vipTLV(u,inner);inner.i=seq.start;
+    var nT=vipTLV(u,inner),eT=vipTLV(u,inner);
+    var ns=nT.start,nl=nT.len;if(u[ns]===0){ns++;nl--;}
+    var BIG=window.BigInt;if(typeof BIG!=='function')throw new Error('no BigInt');
+    var ZERO=BIG(0),ONE=BIG(1),TWO=BIG(2),B256=BIG(256),B255=BIG(255);
+    var n=ZERO,e=ZERO,q;
+    for(q=0;q<nl;q++)n=n*B256+BIG(u[ns+q]);
+    for(q=0;q<eT.len;q++)e=e*B256+BIG(u[eT.start+q]);
+    var msg=new Uint8Array(plain.length);
+    for(q=0;q<plain.length;q++)msg[q]=plain.charCodeAt(q)&255;
+    var psLen=nl-msg.length-3;if(psLen<8)throw new Error('too long');
+    var ps=new Uint8Array(psLen);
+    if(window.crypto&&crypto.getRandomValues){
+      var tmp=new Uint8Array(psLen*2),got=0,j;
+      crypto.getRandomValues(tmp);
+      for(j=0;j<tmp.length&&got<psLen;j++)if(tmp[j]!==0)ps[got++]=tmp[j];
+      while(got<psLen)ps[got++]=Math.floor(Math.random()*255)+1;
+    }else{
+      for(var j2=0;j2<psLen;j2++)ps[j2]=Math.floor(Math.random()*255)+1;
+    }
+    var em=new Uint8Array(nl);
+    em[0]=0;em[1]=2;em.set(ps,2);em[2+psLen]=0;em.set(msg,3+psLen);
+    var mm=ZERO;
+    for(q=0;q<nl;q++)mm=mm*B256+BIG(em[q]);
+    var c=ONE,b=mm%n,ex=e;
+    while(ex>ZERO){if(ex%TWO!==ZERO)c=(c*b)%n;b=(b*b)%n;ex=ex/TWO;}
+    var res=new Uint8Array(nl);
+    for(q=nl-1;q>=0;q--){res[q]=Number(c%B256);c=c/B256;}
+    var s='';for(q=0;q<nl;q++)s+=String.fromCharCode(res[q]);
+    return encodeURIComponent(btoa(s));
+  }
+  function vipLoad(){
+    var p={store_id:STORE_ID,current:1,size:500,timestamp:Math.floor(Date.now()/1000)};
+    return fetch(VIP_API+vipRsaSign(JSON.stringify(p)),{headers:{'Accept':'application/json'}})
+      .then(function(r){return r.json();});
+  }
+  function vipCycle(n){
+    var m=(n||'').match(/(周卡|月卡|季卡|年卡)/);
+    if(m)return {label:m[1],unit:'/'+m[1]};
+    return {label:'卡券',unit:'/张'};
+  }
+  function vipName(n){
+    n=(n||'').trim();
+    if(n.indexOf('肯德基-')===0){
+      var rest=n.slice(4).split('+')[0].replace(/[（(][^)）]*[)）]/g,'');
+      return '肯德基 '+rest.slice(0,10);
+    }
+    return n.length>16?n.slice(0,15)+'…':n;
+  }
+  function vipBrand(b){
+    var s=(b||'会员权益').replace(/视频会员$/,'').replace(/会员$/,'');
+    return s||b;
+  }
+  function vipCat(b){
+    if(/腾讯视频|爱奇艺|优酷|芒果|哔哩哔哩|视频/.test(b))return '影视会员';
+    if(/QQ音乐|网易云|汽水|喜马拉雅|音乐/.test(b))return '音乐听书';
+    if(/网盘|夸克|百度网盘/.test(b))return '网盘存储';
+    if(/QQ/.test(b))return '腾讯业务';
+    if(/剪映|醒图|即梦/.test(b))return '办公设计';
+    if(/肯德基|美团|淘宝|京东|团购|外卖/.test(b))return '美食卡券';
+    if(/知乎|百度搭子|KEEP|丰巢/.test(b))return '生活权益';
+    return '会员权益';
+  }
+  function vipCoupon(x){
+    var n=x.goods_name||'',b=x.brand_name||'';
+    if(/红包|套餐|冰淇淋|原味鸡|葡式|可乐|烤翅|鸡翅|鸡腿堡/.test(n))return true;
+    return /肯德基|美团|淘宝|京东|团购|外卖/.test(b);
+  }
+  function vipRatio(x){
+    var p=Number(x.store_price)||0,f=parseFloat(x.face_value)||0;
+    return f>0?(f-p)/f:0;
+  }
+  function vipCard(x,hot,badge,kind){
+    var name=vipName(x.goods_name),cyc=vipCycle(x.goods_name);
+    var price=Number(x.store_price)||0,face=parseFloat(x.face_value)||0;
+    var tags=(x.tags||[]).filter(Boolean);
+    /* 接口卖点词可能含授权类 / 保证性表述，统一过滤后回落到中性说明 */
+    function safeTag(v,fb){
+      v=String(v||'').trim();
+      if(!v||/官方|正品|直充|直发|保真|靠谱|即时|极速|秒到|最低|全网|免费|100%|永久|保证|无忧/.test(v))return fb;
+      return v.length>12?v.slice(0,12):v;
+    }
+    var t1=safeTag(tags[0],'按办理页充值'),t2=safeTag(tags[1],'详见办理页'),t3=safeTag(tags[2],'以页面说明为准');
+    var faceTxt=face>0?'面值 ¥'+face:'以办理页为准';
+    var flow=face>0?'<b>'+faceTxt+'</b> 以办理页为准':'<b>'+cyc.label+'</b> 以办理页为准';
+    var lis=[t1+' · '+t2,t3+' · 详见办理页',faceTxt+' · 到账见办理页']
+      .map(function(t){return '<li>'+tick()+' '+esc(t)+'</li>';}).join('');
+    var url='https://vip.ksjhaoka.com/pages/coupon/detail?id='+encodeURIComponent(x.goods_id)+'&s='+STORE_ID;
+    return '<div class="pkg'+(hot?' feature':'')+'">'+(hot?'<div class="badge">'+badge+'</div>':'')+
+      '<div class="op op-'+kind+'">'+esc(vipBrand(x.brand_name))+'</div>'+
+      '<div class="cname">'+esc(name)+'</div>'+
+      '<div class="price"><span class="y">¥</span><span class="v">'+esc(price)+'</span><span class="u">'+esc(cyc.unit)+'</span></div>'+
+      '<div class="flow">'+flow+'</div>'+
+      '<ul>'+lis+'</ul>'+
+      '<div class="chips"><span class="chip">'+esc(cyc.label)+'</span><span class="chip">'+esc(vipCat(x.brand_name||''))+'</span></div>'+
+      /* 会员卡券不涉及入网年龄限制，不展示「办理年龄」 */
+      '<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" class="btn '+(hot?'btn-primary':'btn-ghost')+'">立即办理</a>'+
+      '</div>';
+  }
+  function vipMore(title,desc,url){
+    return '<div class="pkg more-card"><div class="more-inner">'+
+      '<div class="more-icon" aria-hidden="true">⋯</div>'+
+      '<div class="more-title">'+esc(title)+'</div>'+
+      '<div class="more-desc">'+esc(desc)+'</div>'+
+      '<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" class="btn btn-primary">前往查看 →</a>'+
+      '</div></div>';
+  }
+  function vipStamp(t){
+    var a=document.getElementById('vipSync'),b=document.getElementById('vipSync2');
+    if(a)a.textContent=t;if(b)b.textContent=t;
+  }
+  function vipRender(list){
+    var arr=(list||[]).filter(function(x){return x&&(Number(x.store_price)||0)>0;});
+    if(!arr.length)throw new Error('empty');
+    var pri={'月卡':0,'季卡':1,'周卡':2,'年卡':3,'卡券':4};
+    var byBrand={},order=[],mem=[];
+    arr.forEach(function(x){
+      var n=x.goods_name||'',p=Number(x.store_price)||0;
+      if(vipCoupon(x)||p>500||/团队版/.test(n))return;
+      var b=x.brand_name||'其他';
+      if(!byBrand[b]){byBrand[b]=[];order.push(b);}
+      byBrand[b].push(x);
+    });
+    order.forEach(function(b){
+      var a=byBrand[b].slice().sort(function(p,q){
+        var pv=pri[vipCycle(p.goods_name||'').label],qv=pri[vipCycle(q.goods_name||'').label];
+        var cp=(pv===undefined?9:pv),cq=(qv===undefined?9:qv);
+        return cp-cq||(Number(p.store_price)||0)-(Number(q.store_price)||0);
+      });
+      mem.push(a[0]);
+    });
+    var ratio=function(a,b){return vipRatio(b)-vipRatio(a)||(Number(a.store_price)||0)-(Number(b.store_price)||0);};
+    var isHotM=function(x){return vipRatio(x)>=0.30&&(Number(x.store_price)||0)<=200;};
+    mem=mem.map(function(x,i){return {x:x,i:i,h:isHotM(x)?0:1};})
+      .sort(function(a,b){return a.h-b.h||(a.h===0&&b.h===0?ratio(a.x,b.x):a.i-b.i);})
+      .map(function(o){return o.x;}).slice(0,VIP_LIMIT1);
+    if(!mem.length)throw new Error('empty member');
+    var used={};mem.forEach(function(x){used[x.goods_id]=1;});
+    var coup=arr.filter(function(x){
+      var p=Number(x.store_price)||0,c=vipCycle(x.goods_name||'').label;
+      return !used[x.goods_id]&&(vipCoupon(x)||(c==='周卡'&&p<=20));
+    }).map(function(x,i){return {x:x,i:i,p:Number(x.store_price)||0};})
+      .sort(function(a,b){return a.p-b.p||a.i-b.i;})
+      .map(function(o){return o.x;}).slice(0,VIP_LIMIT2)
+      .map(function(x,i){return {x:x,i:i,h:(Number(x.store_price)||0)<=10?0:1};})
+      .sort(function(a,b){return a.h-b.h||a.i-b.i;}).map(function(o){return o.x;});
+    if(!coup.length)throw new Error('empty coupon');
+    var g1=document.getElementById('vipGrid1'),g2=document.getElementById('vipGrid2');
+    if(!g1||!g2)return;
+    g1.innerHTML=mem.map(function(x){return vipCard(x,isHotM(x),'超值','vip');}).join('')+
+      vipMore('更多会员权益','查看店铺全部在推会员',VIP_STORE);
+    g2.innerHTML=coup.map(function(x){return vipCard(x,(Number(x.store_price)||0)<=10,'精选','coupon');}).join('')+
+      vipMore('更多卡券','按办理页展示',VIP_CHEAP);
+    var d=new Date(),z=function(n){return(n<10?'0':'')+n;};
+    vipStamp('· 已于 '+z(d.getHours())+':'+z(d.getMinutes())+' 同步');
+    updateAllNav();
+  }
+  vipLoad().then(function(j){
+    if(j&&j.code===0&&j.data&&j.data.list)vipRender(j.data.list);
+    else throw new Error('bad');
+  }).catch(function(){          // 签名或网络失败时保留内置静态会员卡券
+    vipStamp(window.stampAt('· 已于 {t} 载入缓存'));
+    updateAllNav();
+  });
+})();
+</script>
+
+<script>
+/* 返回顶部 + 品牌名刷新回顶 + 空链接占位（不跳转、不改 URL） */
+(function(){
+  /* reload 后不恢复旧滚动位置，保证回到顶部 */
+  if('scrollRestoration' in history){try{history.scrollRestoration='manual';}catch(e){}}
+
+  /* 指向为空的占位链接：点击完全无动作 */
+  document.querySelectorAll('a.lnk-empty').forEach(function(a){
+    a.addEventListener('click',function(ev){ev.preventDefault();});
+  });
+
+  /* 导航栏「速联惠」：刷新页面并回到顶部 */
+  var brand=document.getElementById('brandRefresh');
+  if(brand)brand.addEventListener('click',function(ev){
+    ev.preventDefault();
+    try{window.scrollTo(0,0);}catch(e){}
+    location.reload();
+  });
+
+  /* 移动端横向导航条：标出当前所在版块，并自动把当前项滑进可视区 */
+  var navBar=document.querySelector('.nav-links');
+  if(navBar){
+    var nLinks=[].slice.call(navBar.querySelectorAll('a[href^="#"]'));
+    var nSecs=nLinks.map(function(a){return document.getElementById((a.getAttribute('href')||'').slice(1));});
+    var nLast=-2,nTick=false;
+    function markNav(){
+      var y=window.pageYOffset||document.documentElement.scrollTop||0;
+      var hd=document.querySelector('header');
+      var line=y+(hd?hd.offsetHeight:68)+36;
+      var idx=-1;
+      for(var i=0;i<nSecs.length;i++){
+        var s=nSecs[i];if(!s)continue;
+        if(s.getBoundingClientRect().top+y<=line)idx=i;
+      }
+      if(y<60)idx=-1;
+      if(idx!==nLast){
+        nLast=idx;
+        nLinks.forEach(function(a,i){if(i===idx)a.classList.add('on');else a.classList.remove('on');});
+        if(idx>=0&&navBar.scrollWidth>navBar.clientWidth+2){
+          var a=nLinks[idx],l=a.offsetLeft,r=l+a.offsetWidth,vl=navBar.scrollLeft,vr=vl+navBar.clientWidth;
+          if(l<vl+8)navBar.scrollLeft=Math.max(0,l-12);
+          else if(r>vr-8)navBar.scrollLeft=r-navBar.clientWidth+16;
+        }
+      }
+      nTick=false;
+    }
+    window.addEventListener('scroll',function(){
+      if(!nTick){nTick=true;setTimeout(markNav,120);}
+    },window.slPassive);
+    window.addEventListener('resize',markNav,window.slPassive);
+    markNav();
+  }
+
+  /* 移动端三条横线：展开/收起二级导航菜单 */
+  var navRoot=document.querySelector('.nav');
+  var navToggle=document.getElementById('navToggle');
+  var navPanel=document.getElementById('navLinks');
+  if(navRoot&&navToggle&&navPanel){
+    function setNav(open){
+      if(open)navRoot.classList.add('open');else navRoot.classList.remove('open');
+      navToggle.setAttribute('aria-expanded',open?'true':'false');
+      navToggle.setAttribute('aria-label',open?'关闭导航菜单':'打开导航菜单');
+    }
+    navToggle.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      setNav(!navRoot.classList.contains('open'));
+    });
+    navPanel.addEventListener('click',function(ev){
+      var a=ev.target&&ev.target.closest?ev.target.closest('a'):null;
+      if(a&&navPanel.contains(a))setNav(false);
+    });
+    document.addEventListener('click',function(ev){
+      if(navRoot.classList.contains('open')&&!navRoot.contains(ev.target))setNav(false);
+    });
+    document.addEventListener('keydown',function(ev){
+      if(ev.key==='Escape'||ev.keyCode===27)setNav(false);
+    });
+    window.addEventListener('resize',function(){
+      if(window.innerWidth>980)setNav(false);
+    },window.slPassive);
+  }
+
+  var btn=document.getElementById('backTop');if(!btn)return;
+  var ticking=false;
+  function sync(){
+    var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    if(y>360)btn.classList.add('show');else btn.classList.remove('show');
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking){ticking=true;setTimeout(sync,100);}
+  },window.slPassive);
+  btn.addEventListener('click',function(){
+    try{window.scrollTo({top:0,behavior:'smooth'});}
+    catch(e){window.scrollTo(0,0);}
+  });
+  sync();
+})();
+</script>
+
+<script>
+/* ---------- 地区智能推荐：IP 定位 → 省份 → 智能排序（不隐藏任何套餐） ---------- */
+(function(){
+  var PROV_LIST=['北京','天津','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆','香港','澳门','台湾'];
+  var PROV_CODE={'11':'北京','12':'天津','13':'河北','14':'山西','15':'内蒙古','21':'辽宁','22':'吉林','23':'黑龙江','31':'上海','32':'江苏','33':'浙江','34':'安徽','35':'福建','36':'江西','37':'山东','41':'河南','42':'湖北','43':'湖南','44':'广东','45':'广西','46':'海南','50':'重庆','51':'四川','52':'贵州','53':'云南','54':'西藏','61':'陕西','62':'甘肃','63':'青海','64':'宁夏','65':'新疆','71':'台湾','81':'香港','82':'澳门'};
+  window.provFromText=function(t){
+    t=t||'';
+    for(var i=0;i<PROV_LIST.length;i++){if(t.indexOf(PROV_LIST[i])>=0)return PROV_LIST[i];}
+    return '';
+  };
+  var KEY='sl_region_v1',manual=false,current='全国',detected='';
+  try{
+    /* 兼容此前短暂使用过的专区独立键，避免恢复联动后丢失已选地区 */
+    var saved=localStorage.getItem(KEY)||localStorage.getItem('sl_region_pkg_v1')||localStorage.getItem('sl_region_kd_v1');
+    if(saved&&(saved==='全国'||PROV_LIST.indexOf(saved)>=0)){current=saved;manual=true;}
+  }catch(e){}
+  var bars=[].slice.call(document.querySelectorAll('[data-region-bar]'));
+  if(!bars.length)return;
+
+  bars.forEach(function(bar){
+    var sel=bar.querySelector('.region-select');if(!sel)return;
+    ['全国'].concat(PROV_LIST).forEach(function(p){
+      var o=document.createElement('option');o.value=p;o.textContent=p;sel.appendChild(o);
+    });
+    sel.value=current;
+    sel.addEventListener('change',function(){
+      current=sel.value;manual=true;
+      try{localStorage.setItem(KEY,current);}catch(e){}
+      syncBars();applyRegion();
+    });
+  });
+
+  /* 点击「宽带 N 款」跳到对应专区（a 标签原生锚点 + 平滑滚动），
+     并短暂高亮目标专区的地区条；绑定在容器上，数量提示重写后依然有效 */
+  bars.forEach(function(bar){
+    var box=bar.querySelector('[data-region-summary]');if(!box)return;
+    box.addEventListener('click',function(ev){
+      var a=ev.target&&ev.target.closest?ev.target.closest('a.rc-item'):null;
+      if(!a||!box.contains(a))return;
+      var sec=document.getElementById((a.getAttribute('href')||'').slice(1));
+      var target=sec&&sec.querySelector('[data-region-bar]');
+      if(!target)return;
+      /* 原生锚点负责平滑滚动；个别环境不驱动平滑动画时，700ms 后即时补位 */
+      var startY=window.pageYOffset||document.documentElement.scrollTop||0;
+      var dest=Math.max(0,Math.round(sec.getBoundingClientRect().top+startY));
+      setTimeout(function(){
+        var now=window.pageYOffset||document.documentElement.scrollTop||0;
+        if(Math.abs(now-dest)<=8||Math.abs(now-startY)>8)return;  /* 已到位或用户自己滚过，不打扰 */
+        var root=document.documentElement,old=root.style.scrollBehavior;
+        root.style.scrollBehavior='auto';
+        try{window.scrollTo(0,dest);}finally{root.style.scrollBehavior=old;}
+      },700);
+      target.classList.remove('rc-focus');
+      void target.offsetWidth;                 /* 连续点击同一目标也能重新触发高亮 */
+      target.classList.add('rc-focus');
+      clearTimeout(target._rcTimer);
+      target._rcTimer=setTimeout(function(){target.classList.remove('rc-focus');},1800);
+    });
+  });
+
+  function pkgChildren(sc){
+    return [].slice.call(sc.children).filter(function(el){return el.classList&&el.classList.contains('pkg');});
+  }
+  /* 记录卡片首次出现时的业务默认顺序，便于切回「全国」时完整复原 */
+  var ordSeq=0;
+  function ordOf(el){
+    var v=el.getAttribute('data-ord');
+    if(v==null){v=String(++ordSeq);el.setAttribute('data-ord',v);}
+    return parseInt(v,10);
+  }
+  /* 文本里是否提到某省；排除「禁发/不发/除XX」这类否定表述 */
+  function hasProv(t,p){
+    t=t||'';var i=t.indexOf(p);
+    while(i>=0){
+      if(!/禁|不|无|除|非|拒/.test(t.slice(Math.max(0,i-3),i)))return true;
+      i=t.indexOf(p,i+1);
+    }
+    return false;
+  }
+  function rank(card){
+    if(current==='全国')return 1;   /* 全国视图：不改动原有顺序 */
+    var hay=(card.getAttribute('data-prov')||'')+' '+(card.textContent||'');
+    if(hasProv(hay,current))return 0;                 /* 本省可办（含多省可发） */
+    for(var i=0;i<PROV_LIST.length;i++){
+      if(PROV_LIST[i]!==current&&hasProv(hay,PROV_LIST[i]))return 2; /* 明确标注其它省份 */
+    }
+    return 1;                                        /* 全国可发 / 未标记 */
+  }
+  /* 分专区统计当前地区可选套餐数（不含「更多套餐」卡） */
+  function localCounts(){
+    var r={broadband:0};
+    ['broadband'].forEach(function(id){
+      var root=document.getElementById(id);if(!root)return;
+      root.querySelectorAll('.pkg-scroll > .pkg').forEach(function(c){
+        if(!c.classList.contains('more-card')&&rank(c)===0)r[id]++;
+      });
+    });
+    return r;
+  }
+  function countLocal(){var n=localCounts();return n.broadband;}
+  function titleText(){
+    if(current==='全国')return detected?('已识别 '+detected+' · 当前按全部地区展示'):'暂未识别到所在地区 · 可手动选择收货地区';
+    var n=countLocal();
+    return n?('当前地区：'+current+' · 已把 '+n+' 款本地可办套餐排到最前')
+            :('当前地区：'+current+' · 暂无本地专属套餐，已优先展示全国可发套餐');
+  }
+  /* 筛选提示：当前地区可办宽带数量；胶囊可点击跳到宽带专区 */
+  function rcItem(id,label,n,on){
+    return '<a class="rc-item'+(on?' on':'')+'" href="#'+id+'" '+
+      'aria-label="跳转到宽带专区，本地可办 '+n+' 款">'+
+      label+' <b>'+n+'</b> 款<span class="rc-go" aria-hidden="true">›</span></a>';
+  }
+  function summaryHtml(self,n){
+    if(current==='全国')return '<span class="rc-hint">选择所在地区，查看本地可办宽带</span>';
+    var h='<span class="rc-label">本地可办</span>'+
+      rcItem('broadband','宽带',n.broadband,self==='broadband');
+    if(!n.broadband)h+='<span class="rc-none">暂无本地专属，已优先展示全国可发</span>';
+    return h;
+  }
+  function updateSummary(){
+    var n=localCounts();
+    bars.forEach(function(bar){
+      var box=bar.querySelector('[data-region-summary]');if(!box)return;
+      var sec=bar.closest?bar.closest('section'):null;
+      box.innerHTML=summaryHtml(sec?sec.id:'',n);
+    });
+  }
+  function syncBars(){
+    bars.forEach(function(bar){
+      var sel=bar.querySelector('.region-select');if(sel&&sel.value!==current)sel.value=current;
+      var t=bar.querySelector('.region-title');if(t)t.textContent=titleText();
+    });
+    updateSummary();
+  }
+  var applying=false,pending=false,timer=null;
+  function applyRegion(){
+    if(applying){pending=true;return;}applying=true;   /* 连续切换时排队，不丢弃最后一次 */
+    try{
+      document.querySelectorAll('#broadband .pkg-scroll').forEach(function(sc){
+        var before=pkgChildren(sc),rest=[],more=[];
+        before.forEach(function(c,i){
+          if(c.classList.contains('more-card')){more.push(c);return;}
+          rest.push({el:c,i:i,hot:c.classList.contains('feature')?0:1,r:rank(c),ord:ordOf(c)});
+        });
+        /* 选了具体省份时，地区优先级高于热推：本省 → 全国可发 → 外省；
+           组内仍是热推优先、原序兜底。全国视图下 r 全为 1，顺序与未启用地区功能时完全一致。 */
+        rest.sort(function(a,b){
+          if(current!=='全国'&&a.r!==b.r)return a.r-b.r;
+          return a.hot-b.hot||a.ord-b.ord||a.i-b.i;
+        });
+        rest.forEach(function(o){
+          var el=o.el,isLocal=current!=='全国'&&o.r===0;
+          var old=el.querySelector('.chip-local');if(old)old.parentNode.removeChild(old); /* 清理旧版 chips 标记 */
+          var flag=el.querySelector('.badge-local');
+          el.classList.toggle('pkg-local',isLocal);
+          if(isLocal){
+            if(!flag){flag=document.createElement('span');flag.className='badge-local';flag.textContent='本地可办';el.appendChild(flag);}
+            flag.classList.toggle('below',!!el.querySelector('.badge'));  /* 与热推角标错开，不遮挡 */
+          }else if(flag){flag.parentNode.removeChild(flag);}
+        });
+        var target=rest.map(function(o){return o.el;}).concat(more);
+        var changed=target.some(function(el,i){return before[i]!==el;});
+        if(changed){target.forEach(function(el){sc.appendChild(el);});sc.scrollLeft=0;}
+      });
+      if(typeof updateAllNav==='function')updateAllNav();
+      syncBars();
+    }finally{
+      applying=false;
+      if(pending){pending=false;setTimeout(applyRegion,0);}
+    }
+  }
+  /* 实时接口重建卡片后自动重排；只监听直接子节点，chip 增删不会触发循环 */
+  if(window.MutationObserver){
+    var mo=new MutationObserver(function(){
+      if(applying)return;
+      clearTimeout(timer);timer=setTimeout(applyRegion,80);
+    });
+    document.querySelectorAll('#broadband .pkg-scroll').forEach(function(sc){
+      mo.observe(sc,{childList:true});
+    });
+  }
+  syncBars();applyRegion();
+
+  /* 异步识别访问地区；失败/超时/未知一律回落到「全国」并允许手动切换 */
+  var sc=document.createElement('script'),done=false;
+  var tmr=setTimeout(function(){finish('');},3500);
+  function readProv(){
+    var o=window.returnCitySN||{},cid=String(o.cid||''),cname=String(o.cname||'');
+    return window.provFromText(cname)||PROV_CODE[cid.slice(0,2)]||'';
+  }
+  function finish(p){
+    if(done)return;done=true;clearTimeout(tmr);
+    detected=p||'';
+    if(!manual&&detected)current=detected;
+    syncBars();applyRegion();
+  }
+  sc.onload=function(){finish(readProv());};
+  sc.onerror=function(){finish('');};
+  sc.src='https://pv.sohu.com/cityjson?var=returnCitySN&_='+Date.now();
+  document.head.appendChild(sc);
+})();
+</script>
+
+<script>
+/* 静态兜底卡片没有接口年龄数据，宽带统一补一行「以办理页为准」；
+   实时卡片自带年龄，不会重复添加；会员卡券（#vip）不展示办理年龄 */
+(function(){
+  document.querySelectorAll('.pkg-scroll > .pkg').forEach(function(card){
+    if(card.classList.contains('more-card')||card.querySelector('.pkg-age'))return;
+    if(card.closest&&card.closest('#vip'))return;
+    var btn=card.querySelector('.btn');
+    if(btn)btn.insertAdjacentHTML('beforebegin',window.ageLine());
+    else card.insertAdjacentHTML('beforeend',window.ageLine());
+  });
+})();
+</script>
+
+</body>
+</html>

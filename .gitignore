@@ -1,0 +1,22 @@
+# WorkBuddy 项目内部数据：不发布到 Pages
+.workbuddy/
+
+# 手动备份与阶段快照：只留本地，不发布到 Pages
+*.bak
+index_before_*.html
+全站链路/
+
+# 日志、临时文件、Python 缓存
+*.log
+*.tmp
+__pycache__/
+*.pyc
+
+# 青龙同步脚本只在本地 / 青龙面板使用，不进 Pages 仓库
+qinglong_sync_row2.py
+
+# 微信扫码区已彻底删除，二维码图片保留在本地但不发布
+wechat-qr.png
+
+# 首屏大图版已回滚，图片不再引用且已删除（需要时可从 git 历史恢复）
+hero-banner.jpg
