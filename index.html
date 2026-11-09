@@ -270,8 +270,10 @@
   .sub-row-head .sub-tag{font-size:15px;font-weight:800;color:var(--accent)}
   .sub-row-head .sub-note{font-size:12.5px;color:var(--muted)}
   #broadband .sec-head,#vip .sec-head{margin-bottom:26px}
-  #broadband{background:var(--bg-soft)}
-  #adv{background:var(--bg-soft)}   /* 服务优势：与其它灰色版块统一 */
+  /* 主体统一浅灰带：白底卡片承载内容，版块之间靠标题分组 */
+  .svc,.steps,#adv,#broadband,#vip{background:var(--bg-soft)}
+  /* 相邻同底色版块合并留白，避免两个 88px 叠加成 176px 空白 */
+  #adv,#flow,#broadband,#vip{padding-top:0}
   .sub-row-head.first-row{margin-top:0}
   /* 窄屏轨道内边距变化，标题同步跟随首张卡片（必须放在基础 .sub-row-head 之后） */
   @media(max-width:900px){.sub-row-head{padding-left:54px}}
@@ -588,9 +590,9 @@
     <nav class="nav-links" id="navLinks">
       <a href="#services">主营业务</a>
       <a href="#adv">服务优势</a>
+      <a href="#flow">办理流程</a>
       <a href="#broadband">宽带专区</a>
       <a href="#vip">会员卡券</a>
-      <a href="#flow">办理流程</a>
     </nav>
     <div class="nav-cta">
       <a href="#" class="btn btn-primary lnk-empty" data-empty="1" aria-label="联系客服（暂未设置链接）">联系客服</a>
@@ -732,6 +734,21 @@
         <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
         <h4>权益清楚</h4><p>内容与有效期以办理页为准</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLOW ============ -->
+<section id="flow" class="steps">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">办理流程</div>
+      <h2>三步即可完成，简单明了</h2>
+    </div>
+    <div class="step-grid">
+      <div class="step"><div class="n">01</div><h4>选择产品</h4><p>在线选择宽带或会员权益，查看页面说明。</p></div>
+      <div class="step"><div class="n">02</div><h4>确认规则</h4><p>核对资费、合约期与适用条件，确认后再提交。</p></div>
+      <div class="step"><div class="n">03</div><h4>按指引使用</h4><p>按办理页说明完成开通，售后由对应服务提供方负责。</p></div>
     </div>
   </div>
 </section>
@@ -1416,21 +1433,6 @@
   </div>
 </section>
 
-<!-- ============ FLOW ============ -->
-<section id="flow" class="steps">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-tag">办理流程</div>
-      <h2>三步即可完成，简单明了</h2>
-    </div>
-    <div class="step-grid">
-      <div class="step"><div class="n">01</div><h4>选择产品</h4><p>在线选择宽带或会员权益，查看页面说明。</p></div>
-      <div class="step"><div class="n">02</div><h4>确认规则</h4><p>核对资费、合约期与适用条件，确认后再提交。</p></div>
-      <div class="step"><div class="n">03</div><h4>按指引使用</h4><p>按办理页说明完成开通，售后由对应服务提供方负责。</p></div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="wrap foot">
@@ -1450,8 +1452,8 @@
     </div>
     <div>
       <h5>帮助中心</h5>
-      <a href="#flow">办理流程</a>
       <a href="#adv">服务优势</a>
+      <a href="#flow">办理流程</a>
       <a href="#broadband">宽带专区</a>
     </div>
     <div>
